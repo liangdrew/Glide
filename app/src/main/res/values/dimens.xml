@@ -6,7 +6,7 @@
     <dimen name="corner_radius">4dp</dimen>
     <dimen name="menu_padding">10dp</dimen>
     <dimen name="menu_space">10dp</dimen>
-    <dimen name="menu_text_size">32sp</dimen>
+    <dimen name="menu_text_size">64sp</dimen>
     <dimen name="pause_text_size">75sp</dimen>
     <dimen name="about_title_text_size">50sp</dimen>
     <dimen name="about_text_size">20sp</dimen>
@@ -16,5 +16,6 @@
     <dimen name="control_padding">20dp</dimen>
     <dimen name="drawable_padding">10dp</dimen>
     <dimen name="elevation_low">4dp</dimen>
+    <dimen name="button_size">60dp</dimen>
 </resources>
 

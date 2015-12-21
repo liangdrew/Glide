@@ -216,6 +216,7 @@ public class GameLoop implements Runnable
         if (f.getFoodType() == 0)  // Green
         {
             playerScore += f.getSpeed()*2;
+
         }
         else if (f.getFoodType() == 1)  // Red
         {
@@ -242,7 +243,7 @@ public class GameLoop implements Runnable
 
     private void setHighScore()
     {
-        if (highScore > 0)  //we have a valid score
+        if (highScore > 0)  // Assert that user has achieved a valid score
         {
             int lastHighScore = gameView.getGameActivity().getPrefs().getInt("highScore", 0);
 

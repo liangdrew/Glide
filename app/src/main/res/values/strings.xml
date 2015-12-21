@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">Glide</string>
+    <string name="app_name">GLIDE</string>
     <string name="about_label">About</string>
     <string name="play_game_label">Play Game</string>
-    <string name="about_title">About Glider Dreams</string>
+    <string name="about_title">About GLIDE</string>
     <string name="pause_label">Paused</string>
     <string name="game_over_label">Game Over</string>
     <string name="new_high_score_label">New high score: </string>
