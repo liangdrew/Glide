@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/menu_background"
+    android:padding="@dimen/menu_padding"
+    tools:context=".MainActivity"
+    android:baselineAligned="false"
+    android:orientation="vertical"
+    android:layout_gravity="center">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/menu_space"
+        android:text="@string/app_name"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textSize="@dimen/menu_text_size"
+        android:layout_gravity="center_horizontal"
+        style="@style/Base.Animation.AppCompat.Dialog" />
+
+    <Button
+        android:id="@+id/play_button"
+        android:text="@string/play_game_label"
+        android:textColor="#FFFFFF"
+        android:textSize="35sp"
+        android:padding="@dimen/menu_button_padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/menu_button_margin"
+        android:background="@drawable/play_button_style" />
+
+    <Button
+        android:id="@+id/about_button"
+        android:text="@string/about_label"
+        android:textColor="#FFFFFF"
+        android:textSize="35sp"
+        android:padding="@dimen/menu_button_padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/menu_button_margin"
+        android:background="@drawable/about_button_style" />
+
+</LinearLayout>
