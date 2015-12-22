@@ -263,6 +263,8 @@ public class GameActivity extends Activity
 
     private void die()
     {
+        Log.d("GameActivity", "current Highscore:" + gameView.getGameLoop().getPlayerScore());
+        Log.d("GameActivity", "prefs Highscore:" + prefs.getInt("highscore", 0));
         if (gameView.getGameLoop().getPlayerScore() > prefs.getInt("highscore", 0))
         {
             highScoreText.setText("New high score: " + gameView.getGameLoop().getPlayerScore());

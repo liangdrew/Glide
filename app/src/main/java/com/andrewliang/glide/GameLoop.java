@@ -98,9 +98,10 @@ public class GameLoop implements Runnable
                     while (sleepTime < 0 && framesSkipped < MAX_FRAME_SKIPS)
                     {
                         //UPDATE GAME STATE WITHOUT RENDERING
-                        generateFood();
-                        checkCollision(foods, player);
-                        player.updatePlayer(viewWidth, viewHeight);
+                        updateState();
+//                        generateFood();
+//                        checkCollision(foods, player);
+//                        player.updatePlayer(viewWidth, viewHeight);
                         sleepTime += FRAME_PERIOD;      //sleepTime becomes the time difference between the next frame and the last render
                         framesSkipped++;                //add another skipped frame
                     }
@@ -220,8 +221,8 @@ public class GameLoop implements Runnable
         }
         else if (f.getFoodType() == 1)  // Red
         {
-            if (playerScore != 0){playerScore -= Math.abs(f.getSpeed() - 5);}  // Prevents negative score
-            if (playerScore < 0){playerScore = 0;}
+            if (playerScore != 0){playerScore -= Math.abs(f.getSpeed() - 5);}
+            if (playerScore < 0){playerScore = 0;}  // Prevents negative score
             playerLives -= 1;
             checkDeath();
         }
