@@ -17,5 +17,6 @@
     <dimen name="drawable_padding">10dp</dimen>
     <dimen name="elevation_low">4dp</dimen>
     <dimen name="button_size">60dp</dimen>
+    <dimen name="arrow_key_size">80dp</dimen>
 </resources>
 

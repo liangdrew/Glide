@@ -117,8 +117,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback
         for (Food f:foodsToDraw) {f.drawFood(canvas);}       //draw the foods
 
         canvas.drawText(scoreToDraw, viewWidth2 /20, viewHeight2 /10, TEXT_PAINT); //draw the score text
-        canvas.drawText(livesToDraw, viewWidth2 /4, viewHeight2 /10, TEXT_PAINT);
-        canvas.drawText(highScoreToDraw, viewWidth2/2, viewHeight2/10, TEXT_PAINT);
+        canvas.drawText(livesToDraw, viewWidth2 /3, viewHeight2 /10, TEXT_PAINT);
+        canvas.drawText(highScoreToDraw, viewWidth2/2 + viewWidth2/15, viewHeight2/10, TEXT_PAINT);
 
         s.unlockCanvasAndPost(canvas);                       //finish drawing - stop editing the canvas and post it to the view
     }

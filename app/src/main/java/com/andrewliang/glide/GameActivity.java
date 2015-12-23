@@ -49,6 +49,7 @@ public class GameActivity extends Activity
     @Override
     protected void onResume()
     {
+        Log.d("GameActivity", "onResume");
         super.onResume();
         mMediaPlayer = MediaPlayer.create(this, R.raw.frankum_loop001e);
         mMediaPlayer.setLooping(true);
@@ -105,6 +106,7 @@ public class GameActivity extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        Log.d("GameActivity", "onCreate");
 
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE); // requesting to turn the title OFF
@@ -206,6 +208,8 @@ public class GameActivity extends Activity
         {
             public void onClick(View v)
             {
+
+                highScoreText.setVisibility(TextView.INVISIBLE);
                 pauseButtonDown = false;
                 activityPaused = false;
                 pauseButton.setImageDrawable(getResources().getDrawable(R.drawable.pause_button));
@@ -263,11 +267,15 @@ public class GameActivity extends Activity
 
     private void die()
     {
-        Log.d("GameActivity", "current Highscore:" + gameView.getGameLoop().getPlayerScore());
-        Log.d("GameActivity", "prefs Highscore:" + prefs.getInt("highscore", 0));
-        if (gameView.getGameLoop().getPlayerScore() > prefs.getInt("highscore", 0))
+//        Log.d("GameActivity", "current Highscore:" + gameView.getGameLoop().getPlayerScore());
+//        Log.d("GameActivity", "prefs Highscore:" + prefs.getInt("highScore", -999));
+        if (gameView.getGameLoop().getPlayerScore() > prefs.getInt("highScore", -999))  // Set new high score
         {
+//            Log.d("GameActivity", "new high score");
+            gameView.getGameActivity().getEditor().putInt("highScore", gameView.getGameLoop().getPlayerScore());
+            gameView.getGameActivity().getEditor().commit();
             highScoreText.setText("New high score: " + gameView.getGameLoop().getPlayerScore());
+            highScoreText.setVisibility(TextView.VISIBLE);
         }
         activityPaused = false;
         rightButton.setEnabled(false);
@@ -276,7 +284,6 @@ public class GameActivity extends Activity
         String gameOverText = "Game Over";
         pauseText.setText(gameOverText);
         pauseText.setVisibility(TextView.VISIBLE);
-        highScoreText.setVisibility(TextView.VISIBLE);
         homeButton.setVisibility(Button.VISIBLE);
         restartButton.setVisibility(Button.VISIBLE);
 

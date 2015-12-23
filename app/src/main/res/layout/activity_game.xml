@@ -34,8 +34,8 @@
 
     <ImageButton
         android:id="@+id/left_button"
-        android:layout_width="@dimen/button_size"
-        android:layout_height="@dimen/button_size"
+        android:layout_width="@dimen/arrow_key_size"
+        android:layout_height="@dimen/arrow_key_size"
         android:layout_gravity="bottom"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
@@ -50,8 +50,8 @@
 
     <ImageButton
         android:id="@+id/right_button"
-        android:layout_width="@dimen/button_size"
-        android:layout_height="@dimen/button_size"
+        android:layout_width="@dimen/arrow_key_size"
+        android:layout_height="@dimen/arrow_key_size"
         android:layout_gravity="bottom"
         android:layout_alignBottom="@+id/left_button"
         android:layout_alignParentRight="true"

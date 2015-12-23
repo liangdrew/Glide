@@ -28,7 +28,7 @@ public class Player extends Activity
         screenWidth = width;
         screenHeight = height;
         xPos = width/2;
-        yPos = height/6;
+        yPos = height/5;
         gravity = width/150;
     }
 

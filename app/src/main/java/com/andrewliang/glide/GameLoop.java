@@ -145,6 +145,8 @@ public class GameLoop implements Runnable
         Message gameState = Message.obtain();           //obtain a message from a global pool of recycled messages to avoid creating a new one each time
         gameState.obj = messageBox;                         //set the message as the game loop's player object
         gameView.drawingHandler.sendMessage(gameState); //send the message containing the player to the GameView handler
+
+        checkDeath();
     }
 
     private void generateFood()
@@ -216,7 +218,7 @@ public class GameLoop implements Runnable
     {
         if (f.getFoodType() == 0)  // Green
         {
-            playerScore += f.getSpeed()*2;
+            playerScore += f.getSpeed()*4;
 
         }
         else if (f.getFoodType() == 1)  // Red
@@ -224,7 +226,7 @@ public class GameLoop implements Runnable
             if (playerScore != 0){playerScore -= Math.abs(f.getSpeed() - 5);}
             if (playerScore < 0){playerScore = 0;}  // Prevents negative score
             playerLives -= 1;
-            checkDeath();
+//            checkDeath();
         }
     }
 
@@ -232,8 +234,8 @@ public class GameLoop implements Runnable
     {
         if (playerLives == 0)
         {
-            highScore = playerScore;
-            setHighScore();
+//            highScore = playerScore;
+//            setHighScore();
             setGameIsRunning(false);
             Message deathMessage = Message.obtain();
             deathMessage.arg1 = 1;      //indicates death
@@ -241,19 +243,23 @@ public class GameLoop implements Runnable
         }
 
     }
-
+/*
     private void setHighScore()
     {
-        if (highScore > 0)  // Assert that user has achieved a valid score
+        if (playerScore > 0)
+//        if (highScore > 0)  // Assert that user has achieved a valid score
         {
-            int lastHighScore = gameView.getGameActivity().getPrefs().getInt("highScore", 0);
+            int lastHighScore = gameView.getGameActivity().getPrefs().getInt("highScore", -999);
 
-            if (highScore > lastHighScore)
+            if (playerScore > lastHighScore)
+//            if (highScore > lastHighScore)
             {
-                gameView.getGameActivity().getEditor().putInt("highScore", highScore);
+                gameView.getGameActivity().getEditor().putInt("highScore", playerScore);
+//                gameView.getGameActivity().getEditor().putInt("highScore", highScore);
                 gameView.getGameActivity().getEditor().commit();
             }
         }
-    }
+
+    }*/
 }
 
