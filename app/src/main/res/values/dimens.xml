@@ -5,13 +5,13 @@
     <dimen name="stroke_width">1dp</dimen>
     <dimen name="corner_radius">4dp</dimen>
     <dimen name="menu_padding">10dp</dimen>
-    <dimen name="menu_space">10dp</dimen>
+    <dimen name="menu_space">5dp</dimen>
     <dimen name="menu_text_size">64sp</dimen>
     <dimen name="pause_text_size">60sp</dimen>
     <dimen name="about_title_text_size">50sp</dimen>
     <dimen name="about_text_size">20sp</dimen>
     <dimen name="new_high_score_text_size">30sp</dimen>
-    <dimen name="menu_button_margin">4dp</dimen>
+    <dimen name="menu_button_margin">5dp</dimen>
     <dimen name="menu_button_padding">10dp</dimen>
     <dimen name="control_padding">20dp</dimen>
     <dimen name="drawable_padding">10dp</dimen>

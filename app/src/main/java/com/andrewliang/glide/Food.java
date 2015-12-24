@@ -23,7 +23,20 @@ class Food
         this.speed = speed;
         this.foodRadius = radius;
         this.foodType = type;
-        int[] FOOD_COLORS = {Color.GREEN, Color.RED};
+
+        Color pinkish = new Color();
+        int pinkishRBG = (int)Long.parseLong("FF4079", 16);
+        int pinkR = (pinkishRBG >> 16) & 0xFF;
+        int pinkG = (pinkishRBG >> 8) & 0xFF;
+        int pinkB = (pinkishRBG) & 0xFF;
+
+        Color greyish = new Color();
+        int greyishRBG = (int)Long.parseLong("636363", 16);
+        int greyR = (greyishRBG >> 16) & 0xFF;
+        int greyG = (greyishRBG >> 8) & 0xFF;
+        int greyB = (greyishRBG) & 0xFF;
+
+        int[] FOOD_COLORS = {pinkish.rgb(pinkR, pinkG, pinkB), greyish.rgb(greyR, greyG, greyB)};
         this.foodColor = FOOD_COLORS[type];
     }
 

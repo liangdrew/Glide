@@ -6,17 +6,11 @@
     android:clipChildren="false"
     tools:context=".MainActivity">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/sandy_beach"/>
-
     <fragment
         android:id="@+id/fragment_main"
         class="com.andrewliang.glide.MainFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         tools:layout="@layout/fragment_main"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
