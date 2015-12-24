@@ -39,8 +39,10 @@ public class MainActivity extends Activity {
     protected void onStop()
     {
         super.onStop();
-        mMediaPlayer.release();
-        mMediaPlayer = null;
+        if (mMediaPlayer != null){
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+        }
     }
 
     @Override

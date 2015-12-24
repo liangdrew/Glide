@@ -94,10 +94,12 @@ public class GameActivity extends Activity
     protected void onStop() // When user presses home button on device
     {
         super.onStop();
-        //release the music resource
-        mMediaPlayer.release();
-        mMediaPlayer = null;
 
+        //release the music resource
+        if (mMediaPlayer != null){
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+        }
         // Have the user return to a paused app
         //gameView.pause();
         //activityPaused = true;
@@ -267,11 +269,8 @@ public class GameActivity extends Activity
 
     private void die()
     {
-//        Log.d("GameActivity", "current Highscore:" + gameView.getGameLoop().getPlayerScore());
-//        Log.d("GameActivity", "prefs Highscore:" + prefs.getInt("highScore", -999));
         if (gameView.getGameLoop().getPlayerScore() > prefs.getInt("highScore", -999))  // Set new high score
         {
-//            Log.d("GameActivity", "new high score");
             gameView.getGameActivity().getEditor().putInt("highScore", gameView.getGameLoop().getPlayerScore());
             gameView.getGameActivity().getEditor().commit();
             highScoreText.setText("New high score: " + gameView.getGameLoop().getPlayerScore());
