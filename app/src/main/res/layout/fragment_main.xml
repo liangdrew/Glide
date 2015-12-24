@@ -15,8 +15,8 @@
         android:id="@+id/title_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/menu_space"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="30dp"
         android:text="@string/app_name"
         android:textAppearance="?android:textAppearanceLarge"
         android:textSize="@dimen/menu_text_size"
@@ -33,7 +33,9 @@
         android:layout_height="60dp"
         android:background="@drawable/play_button_style"
         android:layout_margin="@dimen/menu_button_margin"
+        android:layout_marginTop="15dp"
         android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:layout_below="@id/title_text"
         />
 

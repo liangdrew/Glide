@@ -29,8 +29,8 @@ public class GameActivity extends Activity
     // Pause "menu" buttons and text declaration
     private TextView pauseText;
     private TextView highScoreText;
-    private ImageButton restartButton;
-    private ImageButton homeButton;
+    private Button restartButton;
+    private Button homeButton;
 
     // UI variables
     private GameView gameView;
@@ -74,6 +74,7 @@ public class GameActivity extends Activity
     protected void onPause()
     {
         super.onPause();
+        Log.d("GameActivity", "onPause");
 
         //release the music resource
         mHandler.removeCallbacks(null);
@@ -94,13 +95,16 @@ public class GameActivity extends Activity
     protected void onStop() // When user presses home button on device
     {
         super.onStop();
-        //release the music resource
-        mMediaPlayer.release();
-        mMediaPlayer = null;
+        Log.d("GameActivity", "onStop");
+//        release the music resource
+        if (mMediaPlayer != null) {
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+        }
 
         // Have the user return to a paused app
-        //gameView.pause();
-        //activityPaused = true;
+//        gameView.pause();
+//        activityPaused = true;
     }
 
     @Override
@@ -195,7 +199,7 @@ public class GameActivity extends Activity
         });
 
         //home button - returns to main menu (main activity)
-        homeButton = (ImageButton) findViewById(R.id.home_button);
+        homeButton = (Button) findViewById(R.id.home_button);
         homeButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(GameActivity.this, MainActivity.class));       //start the main activity
@@ -203,7 +207,7 @@ public class GameActivity extends Activity
         });
 
         //restart button
-        restartButton = (ImageButton) findViewById(R.id.restart_button);
+        restartButton = (Button) findViewById(R.id.restart_button);
         restartButton.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)

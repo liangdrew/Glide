@@ -1,15 +1,19 @@
 <resources>
     <string name="app_name">GLIDE</string>
-    <string name="about_label">About</string>
-    <string name="play_game_label">Play Game</string>
-    <string name="about_title">About GLIDE</string>
+    <string name="about_label">How to glide</string>
+    <string name="play_game_label">Start gliding!</string>
+    <string name="restart_label">Restart</string>
+    <string name="home_label">Home</string>
+    <string name="about_title">How to Glide</string>
     <string name="pause_label">Paused</string>
     <string name="game_over_label">Game Over</string>
     <string name="new_high_score_label">New high score: </string>
     <string name="about_text">
         Tilt right using the right arrow, tilt left using the left arrow
         \n\
-        Eat green food and avoid red food!
+        \n\
+        Catch red orbs and avoid the grey matter!
+        \n\
         \n\
         Developers:
         \n\

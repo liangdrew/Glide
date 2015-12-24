@@ -29,7 +29,7 @@ public class Player extends Activity
         screenHeight = height;
         xPos = width/2;
         yPos = height/5;
-        gravity = width/150;
+        gravity = width/200;
     }
 
     public void changeAngle(double deltaAngle)

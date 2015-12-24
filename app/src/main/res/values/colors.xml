@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="field_color">#ffffff</color>
     <color name="border_color">#7f7f7f</color>
-    <color name="Pinkish">#FF4079</color>
+    <color name="Pinkish">#f99097</color>
     <color name="Greyish">#636363</color>
+    <color name="Bluish">#ebfef8</color>
 </resources>

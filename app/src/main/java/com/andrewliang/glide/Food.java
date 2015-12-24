@@ -25,7 +25,7 @@ class Food
         this.foodType = type;
 
         Color pinkish = new Color();
-        int pinkishRBG = (int)Long.parseLong("FF4079", 16);
+        int pinkishRBG = (int)Long.parseLong("f99097", 16);
         int pinkR = (pinkishRBG >> 16) & 0xFF;
         int pinkG = (pinkishRBG >> 8) & 0xFF;
         int pinkB = (pinkishRBG) & 0xFF;
