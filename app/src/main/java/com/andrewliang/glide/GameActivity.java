@@ -209,7 +209,7 @@ public class GameActivity extends Activity
             public void onClick(View v)
             {
 
-                highScoreText.setVisibility(TextView.INVISIBLE);
+                highScoreText.setVisibility(TextView.GONE);
                 pauseButtonDown = false;
                 activityPaused = false;
                 pauseButton.setImageDrawable(getResources().getDrawable(R.drawable.pause_button));
