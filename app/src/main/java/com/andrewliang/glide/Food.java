@@ -6,7 +6,7 @@ import android.graphics.Paint;
 
 class Food
 {
-    private final int GREEN_FOOD = 0;                             //for use when creating a new food
+    private int GREEN_FOOD = 0;                             //for use when creating a new food
     private final int RED_FOOD = 1;                               //for use when creating a new food
 
     private final int speed;      //the speed at which this food falls down the screen
