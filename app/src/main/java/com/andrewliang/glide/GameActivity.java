@@ -244,7 +244,7 @@ public class GameActivity extends Activity
                 } else {
                     rightButton.setEnabled(false);
                     leftButton.setEnabled(false);
-                    pauseButton.setImageDrawable(getResources().getDrawable(R.drawable.pause_button));
+                    pauseButton.setImageDrawable(getResources().getDrawable(R.drawable.play_button_image));
                     gameView.pause();
                     pauseButtonDown = true;
                     pauseText.setVisibility(View.VISIBLE);
