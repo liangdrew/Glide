@@ -20,8 +20,8 @@ public class GameLoop implements Runnable
 
     //gameplay variables
     private static final int MAX_NUMBER_OF_FOODS = 7;
-    private final static double PROBABILITY_OF_GREEN_FOOD_SPAWN = 0.0025;  // In decimal
-    private final static double PROBABILITY_OF_RED_FOOD_SPAWN = 0.005;
+    private final static double PROBABILITY_OF_GREEN_FOOD_SPAWN = 0.005;  // In decimal
+    private final static double PROBABILITY_OF_RED_FOOD_SPAWN = 0.01;
     private final int viewWidth;
     private final int viewHeight;
     private int highScore;

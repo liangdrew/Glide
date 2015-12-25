@@ -247,6 +247,8 @@ public class GameActivity extends Activity
                     pauseButton.setImageDrawable(getResources().getDrawable(R.drawable.play_button_image));
                     gameView.pause();
                     pauseButtonDown = true;
+                    String pauseString = "Paused";
+                    pauseText.setText(pauseString);
                     pauseText.setVisibility(View.VISIBLE);
                     restartButton.setVisibility(Button.VISIBLE);
                     homeButton.setVisibility(Button.VISIBLE);

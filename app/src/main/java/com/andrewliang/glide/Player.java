@@ -29,7 +29,7 @@ public class Player extends Activity
         screenHeight = height;
         xPos = width/2;
         yPos = height/5;
-        gravity = width/200;
+        gravity = width/150;
     }
 
     public void changeAngle(double deltaAngle)
@@ -54,7 +54,7 @@ public class Player extends Activity
 
     public void updatePlayer(int screenWidth, int screenHeight)
     {
-        PLAYER_COLOUR.setStrokeWidth(screenHeight/120);
+        PLAYER_COLOUR.setStrokeWidth(screenHeight/80);
         double acceleration = gravity * (-Math.sin(angle) * 0.1) - 0.01 * velocity;
         velocity += acceleration;
         xPos += (int) (velocity * Math.cos(angle));

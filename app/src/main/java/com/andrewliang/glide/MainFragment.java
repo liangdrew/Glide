@@ -11,12 +11,17 @@ import android.view.ViewGroup;
 public class MainFragment extends Fragment {
 
     private AlertDialog mDialog;
+//    private Player pseudoPlayer;
+//    private GameView pseudoGameView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+//        pseudoPlayer = new Player(rootView.getWidth(), rootView.getHeight());
+
         // Handle buttons here...
         View aboutButton = rootView.findViewById(R.id.about_button);
         aboutButton.setOnClickListener(new View.OnClickListener()
@@ -26,21 +31,6 @@ public class MainFragment extends Fragment {
             {
                 Intent intent2 = new Intent(getActivity(), AboutActivity.class);
                 startActivity(intent2);
-
-                /*AlertDialog.Builder builder =
-                        new AlertDialog.Builder(getActivity());
-                builder.setTitle(R.string.about_title);
-                builder.setMessage(R.string.about_text);
-                builder.setCancelable(false); // tells Android not to dismiss dialog when user taps outside box
-                builder.setPositiveButton(R.string.ok_label,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface,
-                                                int i) {
-                                // nothing
-                            }
-                        });
-                mDialog = builder.show();*/
             }
         });
 
@@ -54,15 +44,6 @@ public class MainFragment extends Fragment {
             }
         });
 
-        /*View highScoresButton = rootView.findViewById(R.id.high_scores_button);
-        highScoresButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent2 = new Intent(getActivity(), AboutActivity.class);
-                startActivity(intent2);
-            }
-        });*/
-
         return rootView;
     }
 
@@ -71,8 +52,8 @@ public class MainFragment extends Fragment {
         super.onPause();
 
         // Get rid of the dialog if it's still up
-        if (mDialog != null)
-            mDialog.dismiss();
+//        if (mDialog != null)
+//            mDialog.dismiss();
     }
 }
 

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 public class MainActivity extends Activity {
 
     private MediaPlayer mMediaPlayer;
+    private GameView pseudoGameView;
 
     @Override
     protected void onResume()
@@ -49,6 +50,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+
+
         setContentView(R.layout.activity_main);
     }
 }
