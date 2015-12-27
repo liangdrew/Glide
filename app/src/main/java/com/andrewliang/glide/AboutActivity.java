@@ -52,25 +52,25 @@ public class AboutActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE); // requesting to turn the title OFF
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE); // requesting to turn the title OFF
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//
+//        ABOUT_TEXT_PAINT.setColor(Color.BLACK);
+//        ABOUT_TEXT_PAINT.setAntiAlias(true);
+//        ABOUT_TEXT_PAINT.setTextSize(getSize().x / 25);
 
-        ABOUT_TEXT_PAINT.setColor(Color.BLACK);
-        ABOUT_TEXT_PAINT.setAntiAlias(true);
-        ABOUT_TEXT_PAINT.setTextSize(getSize().x / 25);
-
-        FrameLayout aboutLayout = new FrameLayout(this);
+//        FrameLayout aboutLayout = new FrameLayout(this);
 //        aboutView = new AboutView(this, this);
-        View aboutViewLayout = getLayoutInflater().inflate(R.layout.fragment_about, null);
-        TextView aboutTitle = (TextView) findViewById(R.id.about_title);
-        TextView aboutText = (TextView) findViewById(R.id.about_text);
+//        View aboutViewLayout = getLayoutInflater().inflate(R.layout.fragment_about, null);
+//        TextView aboutTitle = (TextView) findViewById(R.id.about_title);
+//        TextView aboutText = (TextView) findViewById(R.id.about_text);
 //        aboutTitle.getPaint().setFlags(Paint.ANTI_ALIAS_FLAG);
 //        aboutText.getPaint().setAntiAlias(true);
 
 //        aboutLayout.addView(aboutView);
-        aboutLayout.addView(aboutViewLayout);
+//        aboutLayout.addView(aboutViewLayout);
 
-//        setContentView(R.layout.activity_high_scores);
-        setContentView(aboutLayout);
+        setContentView(R.layout.activity_high_scores);
+//        setContentView(aboutLayout);
     }
 }

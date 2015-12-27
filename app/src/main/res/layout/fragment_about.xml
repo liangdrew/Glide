@@ -7,30 +7,37 @@
     tools:context="com.andrewliang.glide.AboutFragment"
     android:antialias="true">
 
-    <TextView
-        android:id="@+id/about_title"
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/about_title"
-        android:textAppearance="?android:textAppearanceLarge"
-        android:textSize="@dimen/about_title_text_size"
-        style="@style/Base.Animation.AppCompat.Dialog"
-        android:layout_alignParentTop="true"
+        android:src="@drawable/how_to_glide"
         android:layout_centerHorizontal="true"
-        android:antialias="true"/>
+        android:layout_centerVertical="true"/>
 
-    <TextView
-        android:id="@+id/about_text"
-        android:layout_width="400dp"
-        android:layout_height="wrap_content"
-        android:text="@string/about_text"
-        android:textAppearance="?android:textAppearanceLarge"
-        android:textSize="@dimen/about_text_size"
-        style="@style/Base.Animation.AppCompat.Dialog"
-        android:gravity="center"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="31dp"
-        android:antialias="true"/>
+    <!--<TextView-->
+        <!--android:id="@+id/about_title"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/about_title"-->
+        <!--android:textAppearance="?android:textAppearanceLarge"-->
+        <!--android:textSize="@dimen/about_title_text_size"-->
+        <!--style="@style/Base.Animation.AppCompat.Dialog"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:antialias="true"/>-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/about_text"-->
+        <!--android:layout_width="400dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/about_text"-->
+        <!--android:textAppearance="?android:textAppearanceLarge"-->
+        <!--android:textSize="@dimen/about_text_size"-->
+        <!--style="@style/Base.Animation.AppCompat.Dialog"-->
+        <!--android:gravity="center"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginBottom="31dp"-->
+        <!--android:antialias="true"/>-->
 
 </RelativeLayout>
