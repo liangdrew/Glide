@@ -19,7 +19,6 @@ public class GameLoop implements Runnable
     private final GameView gameView;
 
     //gameplay variables
-    private static final int MAX_NUMBER_OF_FOODS = 7;
     private final static double PROBABILITY_OF_GREEN_FOOD_SPAWN = 0.0025;  // In decimal
     private final static double PROBABILITY_OF_RED_FOOD_SPAWN = 0.005;
     private final int viewWidth;
@@ -31,7 +30,7 @@ public class GameLoop implements Runnable
     private boolean gameIsRunning = true;
 
     //player variables
-    private final Player player;
+    private Player player;
     private int playerLives = 3;
     private int playerScore = 0;
 
@@ -40,23 +39,49 @@ public class GameLoop implements Runnable
     private final static int MAX_FRAME_SKIPS = 5;
     private final static int FRAME_PERIOD = 1000/MAX_FPS;   // the max time per frame in ms
 
-    public GameLoop(GameView g)
+    public GameLoop(GameView g, int w, int h)
     {
         this.gameView = g;
-        this.viewWidth = gameView.getMeasuredWidth();  // Since game is landscape
-        this.viewHeight = gameView.getMeasuredHeight();
+        this.viewWidth = w;  // Since game is landscape
+        this.viewHeight = h;
         this.player = new Player(viewWidth, viewHeight);  // Fix proportions
     }
 
     public Player getPlayer() {return this.player;}
     public int getPlayerScore() {return this.playerScore;}
-    public int getViewWidth() {return this.viewWidth;}
-    public int getViewHeight() {return this.viewHeight;}
+    public int getPlayerLives(){return this.playerLives;}
+    public ArrayList<int[]> getFoodData(){
+        ArrayList<int[]> ret = new ArrayList<int[]>();
+        int[] xPos = new int[foods.size()];
+        int[] yPos = new int[foods.size()];
+        int[] speeds = new int[foods.size()];
+        int[] types = new int[foods.size()];
+        int i = 0;
+        for (Food f: foods){
+            xPos[i] = f.getXPos();
+            yPos[i] = f.getYPos();
+            speeds[i] = f.getSpeed();
+            types[i] = f.getFoodType();
+            i++;
+        }
+        ret.add(xPos);
+        ret.add(yPos);
+        ret.add(speeds);
+        ret.add(types);
+        return ret;
+    }
+    public void setPlayer(Player p){this.player = p;}
+    public void setPlayerScore(int s){this.playerScore = s;}
+    public void setPlayerLives(int l){this.playerLives = l;}
+    public void setFoods(int[] xPos, int[] yPos, int[] speeds, int[]
+            types){
+        for (int i = 0; i < xPos.length; i++){
+            foods.add(new Food(speeds[i], xPos[i], yPos[i], viewWidth /
+                    60, types[i]));
+        }
+    }
 
     public void setGameIsRunning (boolean r) {gameIsRunning = r;}   //sets the state of the game to running or not
-    public void setGameIsPaused(boolean paused){
-        boolean gameIsPaused = paused;
-    }
 
     @Override
     public void run()
@@ -68,8 +93,7 @@ public class GameLoop implements Runnable
             int sleepTime;      //ms to sleep (<0 if we're behind)
             int framesSkipped;  //number of frame renders being skipped when we're behind
 
-            while (gameIsRunning)
-            {
+            while (gameIsRunning) {
                 try
                 {
                     beginTime = System.currentTimeMillis();
@@ -99,9 +123,9 @@ public class GameLoop implements Runnable
                     {
                         //UPDATE GAME STATE WITHOUT RENDERING
                         updateState();
-//                        generateFood();
-//                        checkCollision(foods, player);
-//                        player.updatePlayer(viewWidth, viewHeight);
+                        generateFood();
+                        checkCollision(foods, player);
+                        player.updatePlayer(viewWidth, viewHeight);
                         sleepTime += FRAME_PERIOD;      //sleepTime becomes the time difference between the next frame and the last render
                         framesSkipped++;                //add another skipped frame
                     }
@@ -109,6 +133,7 @@ public class GameLoop implements Runnable
                 catch (Exception e)
                 {
                     Log.d("GameLoop", "2nd catch " + e.getMessage());
+                    //e.printStackTrace();
                 }
             }
         }
@@ -157,13 +182,13 @@ public class GameLoop implements Runnable
         {
             int speed = rand.nextInt(viewWidth/200) + 1;    //random speed between 1 and 5 pixels per update
             int xPosition = rand.nextInt((int)(viewWidth*59/60 - viewWidth/60 + 1)) + viewWidth/60;     //random x position between 1/60th width and 59/60 width of view
-            foods.add(new Food(speed, xPosition, viewWidth / 60, 0));     //add a new green food to foods
+            foods.add(new Food(speed, xPosition, 0, viewWidth / 60, 0));     //add a new green food to foods
         }
         else if (r > PROBABILITY_OF_GREEN_FOOD_SPAWN && r <= (PROBABILITY_OF_GREEN_FOOD_SPAWN + PROBABILITY_OF_RED_FOOD_SPAWN))
         {
             int speed = rand.nextInt(viewWidth/200) + 1;    //random speed between 1 and 5 pixels per update
             int xPosition = rand.nextInt((int)(viewWidth*59/60 - viewWidth/60 + 1)) + viewWidth/60;     //random x position between 1/60th width and 59/60 width of view
-            foods.add(new Food(speed, xPosition, viewWidth / 60, 1));       //ad a new red food to foods
+            foods.add(new Food(speed, xPosition, 0, viewWidth / 60, 1));       //ad a new red food to foods
         }
     }
 
@@ -243,23 +268,4 @@ public class GameLoop implements Runnable
         }
 
     }
-/*
-    private void setHighScore()
-    {
-        if (playerScore > 0)
-//        if (highScore > 0)  // Assert that user has achieved a valid score
-        {
-            int lastHighScore = gameView.getGameActivity().getPrefs().getInt("highScore", -999);
-
-            if (playerScore > lastHighScore)
-//            if (highScore > lastHighScore)
-            {
-                gameView.getGameActivity().getEditor().putInt("highScore", playerScore);
-//                gameView.getGameActivity().getEditor().putInt("highScore", highScore);
-                gameView.getGameActivity().getEditor().commit();
-            }
-        }
-
-    }*/
 }
-

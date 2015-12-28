@@ -32,6 +32,15 @@ public class Player extends Activity
         gravity = width/150;
     }
 
+    Player (int width, int height, int x, int y){
+        length = width/12;
+        screenWidth = width;
+        screenHeight = height;
+        xPos = x;
+        yPos = y;
+        gravity = width/150;
+    }
+
     public void changeAngle(double deltaAngle)
     {
         this.angle += deltaAngle;
@@ -51,6 +60,8 @@ public class Player extends Activity
     public double getStopX(){return (double) stopX;}
     public double getStartY(){return (double) startY;}
     public double getStopY(){return (double) stopY;}
+    public int getxPos(){return xPos;}
+    public int getyPos(){return yPos;}
 
     public void updatePlayer(int screenWidth, int screenHeight)
     {

@@ -51,21 +51,15 @@ public class GameActivity extends Activity
     {
         Log.d("GameActivity", "onResume");
         super.onResume();
-        mMediaPlayer = MediaPlayer.create(this, R.raw.frankum_loop001e);
-        mMediaPlayer.setLooping(true);
-        mMediaPlayer.start();
+        //mMediaPlayer = MediaPlayer.create(this, R.raw.frankum_loop001e);
+        //mMediaPlayer.setLooping(true);
+        //mMediaPlayer.start();
 
         //resume the game loop
-        if (activityPaused && !pauseButtonDown)
-        {
-            try
-            {
-                gameView.resume();
-            }
-            catch (Exception e)
-            {
-                Log.d("onResume", e.getMessage());
-            }
+        Log.d("onResume", Boolean.toString(activityPaused));
+        Log.d("pauseButtonDown", Boolean.toString(pauseButtonDown));
+        if (activityPaused){
+            gameView.resume();
             activityPaused = false;
         }
     }
@@ -73,19 +67,26 @@ public class GameActivity extends Activity
     @Override
     protected void onPause()
     {
+        Log.d("GameActivity", "onPause");
         super.onPause();
-
         //release the music resource
         mHandler.removeCallbacks(null);
-        mMediaPlayer.stop();
-        mMediaPlayer.reset();
-        mMediaPlayer.release();
+
+        if (mMediaPlayer != null){
+            mMediaPlayer.stop();
+            mMediaPlayer.reset();
+            mMediaPlayer.release();
+        }
+
 
         //pause the game loop
         if (!activityPaused)
         {
-            try {gameView.pause();}
-            catch (Exception e) {Log.d("onResume", e.getMessage());}
+            if (gameView.getGameLoop() == null) Log.d("GameActivity", "game thread null");
+            try {
+                gameView.pause();
+            }
+            catch (Exception e) {Log.d("onPause", e.getMessage());}
             activityPaused = true;
         }
     }
@@ -93,6 +94,7 @@ public class GameActivity extends Activity
     @Override
     protected void onStop() // When user presses home button on device
     {
+        Log.d("GameActivity", "onStop");
         super.onStop();
 
         //release the music resource
@@ -100,17 +102,21 @@ public class GameActivity extends Activity
             mMediaPlayer.release();
             mMediaPlayer = null;
         }
-        // Have the user return to a paused app
-        //gameView.pause();
-        //activityPaused = true;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         Log.d("GameActivity", "onCreate");
-
         super.onCreate(savedInstanceState);
+
+        gameView = new GameView(this, this);
+        Object data = getLastNonConfigurationInstance();
+        if (data != null){
+            gameView.myOnRestoreInstanceState((Bundle) data);
+            activityPaused = true;
+        }
+
         requestWindowFeature(Window.FEATURE_NO_TITLE); // requesting to turn the title OFF
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); // making it full screen
 
@@ -119,7 +125,6 @@ public class GameActivity extends Activity
         editor = prefs.edit();
 
         FrameLayout gameLayout = new FrameLayout(this);
-        gameView = new GameView(this, this);
         View buttonLayout = getLayoutInflater().inflate(R.layout.activity_game, null);
 
         gameLayout.addView(gameView);
@@ -214,6 +219,7 @@ public class GameActivity extends Activity
                 highScoreText.setVisibility(TextView.GONE);
                 pauseButtonDown = false;
                 activityPaused = false;
+                Log.d("restart button", Boolean.toString(activityPaused));
                 pauseButton.setImageDrawable(getResources().getDrawable(R.drawable.pause_button));
                 pauseText.setVisibility(TextView.GONE);
                 homeButton.setVisibility(Button.GONE);
@@ -231,6 +237,7 @@ public class GameActivity extends Activity
             public void onClick(View v) {
                 //if paused, resume, otherwise pause
                 if (activityPaused) {
+                    Log.d("pauseButton", Boolean.toString(activityPaused));
                     rightButton.setEnabled(true);
                     leftButton.setEnabled(true);
                     pauseButton.setImageDrawable(getResources().getDrawable(R.drawable.pause_button));
@@ -250,7 +257,7 @@ public class GameActivity extends Activity
                     homeButton.setVisibility(Button.VISIBLE);
                 }
                 activityPaused = !activityPaused;       //invert the activity state
-
+                Log.d("onResume", Boolean.toString(activityPaused));
             }
         });
     }
@@ -271,12 +278,13 @@ public class GameActivity extends Activity
     {
         if (gameView.getGameLoop().getPlayerScore() > prefs.getInt("highScore", -999))  // Set new high score
         {
-            gameView.getGameActivity().getEditor().putInt("highScore", gameView.getGameLoop().getPlayerScore());
-            gameView.getGameActivity().getEditor().commit();
+            this.getEditor().putInt("highScore", gameView.getGameLoop().getPlayerScore());
+            this.getEditor().commit();
             highScoreText.setText("New high score: " + gameView.getGameLoop().getPlayerScore());
             highScoreText.setVisibility(TextView.VISIBLE);
         }
         activityPaused = false;
+        Log.d("onResume", Boolean.toString(activityPaused));
         rightButton.setEnabled(false);
         leftButton.setEnabled(false);
 
@@ -287,5 +295,17 @@ public class GameActivity extends Activity
         restartButton.setVisibility(Button.VISIBLE);
 
         pauseButtonDown = true;
+    }
+
+    @Override
+    public Object onRetainNonConfigurationInstance(){
+        Log.d("Game Activity", "onRetainNonConfigurationInstance");
+        return gameView.myOnSaveInstanceState();
+    }
+
+    @Override
+    protected void onDestroy(){
+        Log.d("Game Activity", "onDestroy");
+        super.onDestroy();
     }
 }

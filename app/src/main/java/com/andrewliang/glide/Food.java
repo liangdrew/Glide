@@ -16,10 +16,10 @@ class Food
     private final int foodType;   //type of food - atm, either GREEN_FOOD ( = 0) OR RED_FOOD (= 1)
     private final int foodColor;  //red or green, depending on foodType
 
-    Food(int speed, int xPos, int radius, int type)
+    Food(int speed, int xPos, int yPos, int radius, int type)
     {
         this.xPos = xPos;
-        this.yPos = 0;
+        this.yPos = yPos;
         this.speed = speed;
         this.foodRadius = radius;
         this.foodType = type;
