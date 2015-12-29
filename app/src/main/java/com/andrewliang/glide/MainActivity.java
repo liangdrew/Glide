@@ -1,6 +1,7 @@
 package com.andrewliang.glide;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,15 @@ import android.util.Log;
 public class MainActivity extends Activity {
 
     private MediaPlayer mMediaPlayer;
+
+    @Override
+    public void onBackPressed(){
+        // exit the app when back button pressed
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
 
     @Override
     protected void onResume()

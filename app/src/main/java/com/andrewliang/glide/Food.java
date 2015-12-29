@@ -29,13 +29,11 @@ class Food
     }
 
     private void setColors(){
-        Color pinkish = new Color();
         int pinkishRBG = (int)Long.parseLong("FF4079", 16);
         int pinkR = (pinkishRBG >> 16) & 0xFF;
         int pinkG = (pinkishRBG >> 8) & 0xFF;
         int pinkB = (pinkishRBG) & 0xFF;
 
-        Color greyish = new Color();
         int greyishRBG = (int)Long.parseLong("636363", 16);
         int greyR = (greyishRBG >> 16) & 0xFF;
         int greyG = (greyishRBG >> 8) & 0xFF;

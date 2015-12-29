@@ -11,9 +11,6 @@ import java.lang.String;
 import java.lang.System;
 import java.lang.Thread;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Random;
 
 public class GameLoop implements Runnable
@@ -22,15 +19,12 @@ public class GameLoop implements Runnable
     private final GameView gameView;
 
     //gameplay variables
-    private final static double PROBABILITY_OF_GREEN_FOOD_SPAWN = 0.0025;  // In decimal
+    private final static double PROBABILITY_OF_GREEN_FOOD_SPAWN = 0.0025;
     private final static double PROBABILITY_OF_RED_FOOD_SPAWN = 0.005;
     private final int viewWidth;
     private final int viewHeight;
     private int highScore;
     private final  ArrayList<Food> foods = new ArrayList<Food>();
-
-    //game state variables
-    public boolean gameIsRunning = true;
 
     //player variables
     private Player player;
@@ -38,18 +32,20 @@ public class GameLoop implements Runnable
     private int playerScore = 0;
 
     //game loop timing variables
+    public boolean gameIsRunning = true;
     private final static int MAX_FPS = 50;
     private final static int MAX_FRAME_SKIPS = 5;
     private final static int FRAME_PERIOD = 1000/MAX_FPS;   // the max time per frame in ms
 
-    public GameLoop(GameView g, int w, int h)
-    {
+    public GameLoop(GameView g, int w, int h) {
         this.gameView = g;
         this.viewWidth = w;  // Since game is landscape
         this.viewHeight = h;
         this.player = new Player(viewWidth, viewHeight);  // Fix proportions
     }
 
+    // lots of setters and getters, because we have to recreate the game loop when the screen is locked/unlcocked
+    public void setGameIsRunning (boolean r) {gameIsRunning = r;}   //sets the state of the game to running or not
     public Player getPlayer() {return this.player;}
     public int getPlayerScore() {return this.playerScore;}
     public int getPlayerLives(){return this.playerLives;}
@@ -84,21 +80,16 @@ public class GameLoop implements Runnable
         }
     }
 
-    public void setGameIsRunning (boolean r) {gameIsRunning = r;}   //sets the state of the game to running or not
-
     @Override
-    public void run()
-    {
-        synchronized (gameView)
-        {
+    public void run() {
+        synchronized (gameView) {
             long beginTime;     //the time at the start of the loop iteration
             long timeDiff;      //the time it took for the update/render cycle to execute
             int sleepTime;      //ms to sleep (<0 if we're behind)
             int framesSkipped;  //number of frame renders being skipped when we're behind
 
             while (gameIsRunning) {
-                try
-                {
+                try {
                     beginTime = System.currentTimeMillis();
                     framesSkipped = 0;                      //reset the frames skipped
 
@@ -109,21 +100,18 @@ public class GameLoop implements Runnable
                     timeDiff = System.currentTimeMillis() - beginTime;
                     sleepTime = (int) (FRAME_PERIOD - timeDiff);
 
-                    if (sleepTime > 0)  //means there is left over time in the frame period
-                    {
-                        try
-                        {
+                    // check if there is left over time in the frame period
+                    if (sleepTime > 0){
+                        try {
                             //sleep the thread for sleepTime ms
                             Thread.sleep(sleepTime);
                         }
-                        catch (InterruptedException e)
-                        {
+                        catch (InterruptedException e) {
                             Log.d("GameLoop", "1st catch " + e.getMessage());
                         }
                     }
 
-                    while (sleepTime < 0 && framesSkipped < MAX_FRAME_SKIPS)
-                    {
+                    while (sleepTime < 0 && framesSkipped < MAX_FRAME_SKIPS) {
                         //UPDATE GAME STATE WITHOUT RENDERING
                         updateState();
                         generateFood();
@@ -133,8 +121,7 @@ public class GameLoop implements Runnable
                         framesSkipped++;                //add another skipped frame
                     }
                 }
-                catch (Exception e)
-                {
+                catch (Exception e) {
                     Log.d("GameLoop", "2nd catch " + e.getMessage());
                     e.printStackTrace();
                 }
@@ -142,8 +129,7 @@ public class GameLoop implements Runnable
         }
     }
 
-    private void updateState()
-    {
+    private void updateState() {
         player.updatePlayer(viewWidth, viewHeight);
         checkCollision(foods, player);
 
@@ -181,26 +167,22 @@ public class GameLoop implements Runnable
         checkDeath();
     }
 
-    private void generateFood()
-    {
+    private void generateFood() {
         double r = Math.random();                   //get a random number r between 0 and 1
         Random rand = new Random();
-        if (r <= PROBABILITY_OF_GREEN_FOOD_SPAWN)
-        {
+        if (r <= PROBABILITY_OF_GREEN_FOOD_SPAWN) {
             int speed = rand.nextInt(viewWidth/200) + 1;    //random speed between 1 and 5 pixels per update
             int xPosition = rand.nextInt((int)(viewWidth*59/60 - viewWidth/60 + 1)) + viewWidth/60;     //random x position between 1/60th width and 59/60 width of view
             foods.add(new Food(speed, xPosition, 0, viewWidth / 60, 0));     //add a new green food to foods
         }
-        else if (r > PROBABILITY_OF_GREEN_FOOD_SPAWN && r <= (PROBABILITY_OF_GREEN_FOOD_SPAWN + PROBABILITY_OF_RED_FOOD_SPAWN))
-        {
+        else if (r > PROBABILITY_OF_GREEN_FOOD_SPAWN && r <= (PROBABILITY_OF_GREEN_FOOD_SPAWN + PROBABILITY_OF_RED_FOOD_SPAWN)) {
             int speed = rand.nextInt(viewWidth/200) + 1;    //random speed between 1 and 5 pixels per update
             int xPosition = rand.nextInt((int)(viewWidth*59/60 - viewWidth/60 + 1)) + viewWidth/60;     //random x position between 1/60th width and 59/60 width of view
             foods.add(new Food(speed, xPosition, 0, viewWidth / 60, 1));       //ad a new red food to foods
         }
     }
 
-    private void checkCollision(ArrayList<Food> foods, Player player)
-    {
+    private void checkCollision(ArrayList<Food> foods, Player player) {
         double collisionParameter;
         double[] distancesSquared;
         distancesSquared = new double[2];
@@ -213,16 +195,14 @@ public class GameLoop implements Runnable
         Vector2 EndPoint1 = new Vector2(player.getStartX(), player.getStartY());    //call this vector V
         Vector2 EndPoint2 = new Vector2(player.getStopX(), player.getStopY());      //call this vector W
 
-        for (Food f : foods)
-        {
+        for (Food f : foods) {
             FoodCenter = new Vector2(f.getXPos(), f.getYPos());
             VP = FoodCenter.subtract(EndPoint1);
             VW = EndPoint2.subtract(EndPoint1);
 
             collisionParameter = VP.getDotProductWith(VW)/VW.getMagSquared();
 
-            if (collisionParameter <= 1 && collisionParameter >= 0)
-            {
+            if (collisionParameter <= 1 && collisionParameter >= 0) {
                 ClosestPointOnSegment = EndPoint1.add(VW.ScalarMult(collisionParameter));       //get closest point
                 distancesSquared[0] = FoodCenter.getDistanceSquaredTo(ClosestPointOnSegment);   //get distance from food to closest point
                 distancesSquared[1] = 0;
@@ -233,8 +213,7 @@ public class GameLoop implements Runnable
                     updateScore(f);
                 }
             }
-            else
-            {
+            else {
                 distancesSquared[0] = FoodCenter.getDistanceSquaredTo(EndPoint1);
                 distancesSquared[1] = FoodCenter.getDistanceSquaredTo(EndPoint2);
 
@@ -252,28 +231,20 @@ public class GameLoop implements Runnable
 
     }
 
-    private void updateScore(Food f)
-    {
-        if (f.getFoodType() == 0)  // Green
-        {
+    private void updateScore(Food f) {
+        if (f.getFoodType() == 0){  // Green
             playerScore += f.getSpeed()*4;
 
         }
-        else if (f.getFoodType() == 1)  // Red
-        {
+        else if (f.getFoodType() == 1){  // Red
             if (playerScore != 0){playerScore -= Math.abs(f.getSpeed() - 5);}
             if (playerScore < 0){playerScore = 0;}  // Prevents negative score
             playerLives -= 1;
-//            checkDeath();
         }
     }
 
-    private void checkDeath()
-    {
-        if (playerLives == 0)
-        {
-//            highScore = playerScore;
-//            setHighScore();
+    private void checkDeath() {
+        if (playerLives == 0) {
             setGameIsRunning(false);
             Message deathMessage = Message.obtain();
             deathMessage.arg1 = 1;      //indicates death
