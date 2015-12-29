@@ -3,6 +3,7 @@ package com.andrewliang.glide;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -103,6 +104,7 @@ public class GameActivity extends Activity {
         Log.d("GameActivity", "onCreate");
         super.onCreate(savedInstanceState);
 
+        // create the gameView object, and restore it to its previous state if needed
         gameView = new GameView(this, this);
         Object data = getLastNonConfigurationInstance();
         if (data != null){

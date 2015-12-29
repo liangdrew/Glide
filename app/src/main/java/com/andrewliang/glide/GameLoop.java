@@ -11,6 +11,9 @@ import java.lang.String;
 import java.lang.System;
 import java.lang.Thread;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Random;
 
 public class GameLoop implements Runnable
@@ -24,7 +27,7 @@ public class GameLoop implements Runnable
     private final int viewWidth;
     private final int viewHeight;
     private int highScore;
-    private final ArrayList<Food> foods = new ArrayList<Food>();
+    private final  ArrayList<Food> foods = new ArrayList<Food>();
 
     //game state variables
     public boolean gameIsRunning = true;
@@ -133,7 +136,7 @@ public class GameLoop implements Runnable
                 catch (Exception e)
                 {
                     Log.d("GameLoop", "2nd catch " + e.getMessage());
-                    //e.printStackTrace();
+                    e.printStackTrace();
                 }
             }
         }
@@ -146,15 +149,19 @@ public class GameLoop implements Runnable
 
         //update game state (just updating the player for now)
         generateFood();
-        for (Food f:foods)
-        {
+
+        // remove foods that are past the boundary
+        ArrayList<Food> foodsToRemove = new ArrayList<Food>();
+        for (Food f:foods) {
             f.updateFoodPos();
-            if (f.getYPos() > viewHeight + f.getFoodRadius())
-            {
-                foods.remove(f);
+            if (f.getYPos() > viewHeight + f.getFoodRadius()) {
+                foodsToRemove.add(f);
             }
         }
 
+        for (Food f:foodsToRemove){
+            foods.remove(f);
+        }
         //package the updated foods and player into a box to send as a message to the handler in gameview
         Box<ArrayList<Food>, Player, String, String, String> messageBox = new Box<ArrayList<Food>, Player, String, String, String>();
         messageBox.setFoods(foods);
@@ -201,6 +208,7 @@ public class GameLoop implements Runnable
         Vector2 VP;
         Vector2 VW;
         Vector2 ClosestPointOnSegment;
+        ArrayList<Food> foodsToRemove = new ArrayList<Food>();
 
         Vector2 EndPoint1 = new Vector2(player.getStartX(), player.getStartY());    //call this vector V
         Vector2 EndPoint2 = new Vector2(player.getStopX(), player.getStopY());      //call this vector W
@@ -221,7 +229,7 @@ public class GameLoop implements Runnable
 
                 if (distancesSquared[0] <= (Math.pow(f.getFoodRadius(), 2)))
                 {
-                    foods.remove(f);
+                    foodsToRemove.add(f);
                     updateScore(f);
                 }
             }
@@ -232,11 +240,16 @@ public class GameLoop implements Runnable
 
                 if (distancesSquared[0] <= Math.pow(f.getFoodRadius(), 2) || distancesSquared[1] <= Math.pow(f.getFoodRadius(), 2))
                 {
-                    foods.remove(f);
+                    foodsToRemove.add(f);
                     updateScore(f);
                 }
             }
         }
+
+        for (Food f: foodsToRemove){
+            foods.remove(f);
+        }
+
     }
 
     private void updateScore(Food f)

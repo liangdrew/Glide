@@ -4,6 +4,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import java.util.ListIterator;
+
 class Food
 {
     private int GREEN_FOOD = 0;                             //for use when creating a new food
@@ -14,7 +16,7 @@ class Food
     private int yPos;       //y position of the center of the food
     private final int foodRadius;
     private final int foodType;   //type of food - atm, either GREEN_FOOD ( = 0) OR RED_FOOD (= 1)
-    private final int foodColor;  //red or green, depending on foodType
+    private int foodColor;  //red or green, depending on foodType
 
     Food(int speed, int xPos, int yPos, int radius, int type)
     {
@@ -23,7 +25,10 @@ class Food
         this.speed = speed;
         this.foodRadius = radius;
         this.foodType = type;
+        setColors();
+    }
 
+    private void setColors(){
         Color pinkish = new Color();
         int pinkishRBG = (int)Long.parseLong("FF4079", 16);
         int pinkR = (pinkishRBG >> 16) & 0xFF;
@@ -36,8 +41,8 @@ class Food
         int greyG = (greyishRBG >> 8) & 0xFF;
         int greyB = (greyishRBG) & 0xFF;
 
-        int[] FOOD_COLORS = {pinkish.rgb(pinkR, pinkG, pinkB), greyish.rgb(greyR, greyG, greyB)};
-        this.foodColor = FOOD_COLORS[type];
+        int[] FOOD_COLORS = {Color.rgb(pinkR, pinkG, pinkB), Color.rgb(greyR, greyG, greyB)};
+        this.foodColor = FOOD_COLORS[foodType];
     }
 
     public int getXPos() {return xPos;}
