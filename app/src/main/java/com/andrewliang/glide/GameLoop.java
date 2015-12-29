@@ -27,7 +27,7 @@ public class GameLoop implements Runnable
     private final ArrayList<Food> foods = new ArrayList<Food>();
 
     //game state variables
-    private boolean gameIsRunning = true;
+    public boolean gameIsRunning = true;
 
     //player variables
     private Player player;

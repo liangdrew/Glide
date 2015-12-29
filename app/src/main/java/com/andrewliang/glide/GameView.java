@@ -53,73 +53,56 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         TEXT_PAINT.setTextSize(viewWidth2 / 25);  // Consider making text size constant
         BACKGROUND_PAINT.setColor(Color.WHITE);
 
+
         gameLoop.setGameIsRunning(true);
         gameThread = new Thread(gameLoop);
         gameThread.start();
 
+
     }
 
     public Bundle myOnSaveInstanceState() {
+        // save game data in a bundle
         Log.d("gameView", "saved instance state");
         Bundle bundle = new Bundle();
-        // save everything
+
+        // save player data
         bundle.putInt("xPos", gameLoop.getPlayer().getxPos());
         bundle.putInt("yPos", gameLoop.getPlayer().getyPos());
         bundle.putInt("playerLives", gameLoop.getPlayerLives());
         bundle.putInt("playerScore", gameLoop.getPlayerScore());
+        bundle.putDouble("player angle", gameLoop.getPlayer().getAngle());
+        bundle.putDouble("player velocity", gameLoop.getPlayer().getVelocity());
+
         // save the food data
-        ArrayList<int[]> foodData = new ArrayList<int[]>();
-        foodData = gameLoop.getFoodData();
+        ArrayList<int[]> foodData = gameLoop.getFoodData();
         bundle.putIntArray("food xPos", foodData.get(0));
         bundle.putIntArray("food yPos", foodData.get(1));
         bundle.putIntArray("food speeds", foodData.get(2));
         bundle.putIntArray("food types", foodData.get(3));
+
         return bundle;
     }
 
     public void myOnRestoreInstanceState(Bundle bundle) {
+        // load game data from previous state stored in bundle
         Log.d("gameView", "restored instance state");
-        // load everything
+
+        // load player data
         gameLoop.setPlayerScore(bundle.getInt("playerScore"));
         gameLoop.setPlayerLives(bundle.getInt("playerLives"));
         Player p = new Player(viewWidth2, viewHeight2, bundle.getInt("xPos"), bundle.getInt("yPos"));
+        p.setAngle(bundle.getDouble("player angle"));
+        p.setVelocity(bundle.getDouble("player velocity"));
         gameLoop.setPlayer(p);
-        gameLoop.setFoods(bundle.getIntArray("food xPos"),
-                bundle.getIntArray("food yPos"),
-                bundle.getIntArray("food speeds"),
-                bundle.getIntArray("food types"));
+
+        // load food data
+        gameLoop.setFoods(bundle.getIntArray("food xPos"), bundle.getIntArray("food yPos"),
+                bundle.getIntArray("food speeds"), bundle.getIntArray("food types"));
     }
 
     public GameLoop getGameLoop() {return this.gameLoop;}
     public GameActivity getGameActivity() {return this.gameActivity;}
-
-    /*
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh)
-    {
-        // start the game loop in this method to get screen dimensions
-        Log.d("gameView","onSizeChanged");
-        super.onSizeChanged(w, h, oldw, oldh);
-
-        // create game loop and get screen dimensions
-        viewHeight2 = this.getMeasuredHeight();
-        viewWidth2 = this.getMeasuredWidth();
-        if (gameLoop == null) gameLoop = new GameLoop(this, viewWidth2, viewHeight2);
-
-        // set paints
-        TEXT_PAINT.setColor(Color.BLACK);
-        TEXT_PAINT.setAntiAlias(true);
-        TEXT_PAINT.setTextSize(viewWidth2 / 25);  // Consider making text size constant
-        BACKGROUND_PAINT.setColor(Color.WHITE);
-
-        // start the game loop thread
-        if (gameThread != null){
-            gameLoop.setGameIsRunning(true);
-            gameThread = new Thread(gameLoop);
-            gameThread.start();
-        }
-    }
-    */
 
     final Handler drawingHandler = new Handler()
     {
@@ -136,25 +119,28 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
     };
 
-    public void pause()
-    {
+    public void pause() {
+        Log.d("gameView", "pause");
         gameLoop.setGameIsRunning(false);
-        try
-        {
+
+        try {
             gameThread.join();
         }
         catch (InterruptedException e){Log.d("gameView pause", e.getMessage());}
+
         gameThread = null;
     }
 
     public void resume()
     {
+        Log.d("gameView", "resume");
         gameLoop.setGameIsRunning(true);
         gameThread = new Thread(gameLoop);
         gameThread.start();
     }
     public void restartGame()
     {
+        Log.d("gameView", "restart");
         gameLoop = null;
         gameThread = null;
 
@@ -186,22 +172,17 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     //override some interface methods because we implemented the SurfaceHolder.callback interface
     @Override
-    public void surfaceCreated(SurfaceHolder holder)
-    {
-        if (gameThread == null){
-            gameLoop.setGameIsRunning(true);
-            gameThread = new Thread(gameLoop);
-            gameThread.start();
-        }
-
-        if (canvas != null && s != null) {
-            drawGame();
-        }
+    public void surfaceCreated(SurfaceHolder holder) {
+        Log.d("gameView", "surface created");
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        Log.d("gameView", "surface changed");
+    }
 
     @Override
-    public void surfaceDestroyed(SurfaceHolder holder){}
+    public void surfaceDestroyed(SurfaceHolder holder){
+        Log.d("gameView", "surface destroyed");
+    }
 }

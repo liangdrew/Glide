@@ -18,8 +18,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-public class GameActivity extends Activity
-{
+public class GameActivity extends Activity {
     private static final double DELTA_ANGLE = Math.PI/40;
     private MediaPlayer mMediaPlayer;
     private final Handler mHandler = new Handler();
@@ -42,7 +41,6 @@ public class GameActivity extends Activity
     private static final String PREFS_NAME = "MyPrefsFile";
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
-
     public SharedPreferences getPrefs() {return this.prefs;}
     public SharedPreferences.Editor getEditor() {return this.editor;}
 
@@ -58,10 +56,12 @@ public class GameActivity extends Activity
         //resume the game loop
         Log.d("onResume", Boolean.toString(activityPaused));
         Log.d("pauseButtonDown", Boolean.toString(pauseButtonDown));
+
+
         if (activityPaused){
-            gameView.resume();
-            activityPaused = false;
+            pauseButton.callOnClick();
         }
+
     }
 
     @Override
@@ -78,16 +78,9 @@ public class GameActivity extends Activity
             mMediaPlayer.release();
         }
 
-
         //pause the game loop
-        if (!activityPaused)
-        {
-            if (gameView.getGameLoop() == null) Log.d("GameActivity", "game thread null");
-            try {
-                gameView.pause();
-            }
-            catch (Exception e) {Log.d("onPause", e.getMessage());}
-            activityPaused = true;
+        if (!activityPaused) {
+            pauseButton.callOnClick();
         }
     }
 
@@ -114,7 +107,6 @@ public class GameActivity extends Activity
         Object data = getLastNonConfigurationInstance();
         if (data != null){
             gameView.myOnRestoreInstanceState((Bundle) data);
-            activityPaused = true;
         }
 
         requestWindowFeature(Window.FEATURE_NO_TITLE); // requesting to turn the title OFF
@@ -124,7 +116,7 @@ public class GameActivity extends Activity
         prefs = this.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         editor = prefs.edit();
 
-        FrameLayout gameLayout = new FrameLayout(this);
+        final FrameLayout gameLayout = new FrameLayout(this);
         View buttonLayout = getLayoutInflater().inflate(R.layout.activity_game, null);
 
         gameLayout.addView(gameView);
@@ -237,7 +229,6 @@ public class GameActivity extends Activity
             public void onClick(View v) {
                 //if paused, resume, otherwise pause
                 if (activityPaused) {
-                    Log.d("pauseButton", Boolean.toString(activityPaused));
                     rightButton.setEnabled(true);
                     leftButton.setEnabled(true);
                     pauseButton.setImageDrawable(getResources().getDrawable(R.drawable.pause_button));
@@ -257,7 +248,8 @@ public class GameActivity extends Activity
                     homeButton.setVisibility(Button.VISIBLE);
                 }
                 activityPaused = !activityPaused;       //invert the activity state
-                Log.d("onResume", Boolean.toString(activityPaused));
+                Log.d("pause button", Boolean.toString(activityPaused));
+                Log.d("game running", Boolean.toString(gameView.getGameLoop().gameIsRunning));
             }
         });
     }
@@ -299,13 +291,15 @@ public class GameActivity extends Activity
 
     @Override
     public Object onRetainNonConfigurationInstance(){
-        Log.d("Game Activity", "onRetainNonConfigurationInstance");
-        return gameView.myOnSaveInstanceState();
+        Log.d("GameActivity", "onRetainNonConfigurationInstance");
+        Bundle ret =  gameView.myOnSaveInstanceState();
+        gameView = null;
+        return ret;
     }
 
     @Override
     protected void onDestroy(){
-        Log.d("Game Activity", "onDestroy");
+        Log.d("GameActivity", "onDestroy");
         super.onDestroy();
     }
 }

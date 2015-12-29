@@ -41,11 +41,6 @@ public class Player extends Activity
         gravity = width/150;
     }
 
-    public void changeAngle(double deltaAngle)
-    {
-        this.angle += deltaAngle;
-    }
-
     public void drawPlayer(Canvas canvas)
     {
         PLAYER_COLOUR.setColor(Color.DKGRAY);
@@ -62,6 +57,14 @@ public class Player extends Activity
     public double getStopY(){return (double) stopY;}
     public int getxPos(){return xPos;}
     public int getyPos(){return yPos;}
+    public double getVelocity(){return this.velocity;}
+    public double getAngle(){return this.angle;}
+    public void setAngle(double Angle){this.angle = Angle;}
+    public void changeAngle(double deltaAngle)
+    {
+        this.angle += deltaAngle;
+    }
+    public void setVelocity(double v){this.velocity = v;}
 
     public void updatePlayer(int screenWidth, int screenHeight)
     {
