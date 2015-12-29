@@ -6,14 +6,20 @@
     android:id="@+id/activity_game"
     tools:context=".GameActivity">
 
-    <TextView
-        android:id="@+id/pause_text"
+    <ImageView
+        android:id="@+id/pausedTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/pause_label"
-        android:textAppearance="?android:textAppearanceLarge"
-        android:textSize="@dimen/pause_text_size"
-        style="@style/Base.Animation.AppCompat.Dialog"
+        android:src="@drawable/paused_title"
+        android:layout_below="@+id/new_high_score_text"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/gameoverTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/gameover_title"
         android:layout_below="@+id/new_high_score_text"
         android:layout_centerHorizontal="true"
         android:visibility="gone"/>
@@ -90,7 +96,7 @@
         android:layout_marginTop="15dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_below="@id/pause_text"
+        android:layout_below="@id/pausedTitle"
         android:visibility="gone"
         />
 

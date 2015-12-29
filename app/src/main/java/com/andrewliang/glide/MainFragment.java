@@ -1,6 +1,5 @@
 package com.andrewliang.glide;
 
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,17 +9,11 @@ import android.view.ViewGroup;
 
 public class MainFragment extends Fragment {
 
-    private AlertDialog mDialog;
-//    private Player pseudoPlayer;
-//    private GameView pseudoGameView;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
-//        pseudoPlayer = new Player(rootView.getWidth(), rootView.getHeight());
 
         // Handle buttons here...
         View aboutButton = rootView.findViewById(R.id.about_button);
@@ -50,10 +43,6 @@ public class MainFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-
-        // Get rid of the dialog if it's still up
-//        if (mDialog != null)
-//            mDialog.dismiss();
     }
 }
 

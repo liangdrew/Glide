@@ -1,56 +1,56 @@
 package com.andrewliang.glide;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
+import android.util.Log;
 
 public class MainActivity extends Activity {
 
-    private MediaPlayer mMediaPlayer;
-    private GameView pseudoGameView;
+    private final String TAG = "MainActivity";
+
+    private static MusicManager mM = new MusicManager();
+
+    public static MusicManager getmM() {return mM;}
 
     @Override
     protected void onResume()
     {
         super.onResume();
-
-        mMediaPlayer = MediaPlayer.create(this, R.raw.a_guy_1_epicbuilduploop);
-        mMediaPlayer.setVolume(0.5f, 0.5f);
-        mMediaPlayer.setLooping(true);
-        mMediaPlayer.start();
+        Log.d(TAG, "onResume");
+        mM.start(this);
     }
 
     @Override
     protected void onPause()
     {
         super.onPause();
-
-        mMediaPlayer.stop();
-        mMediaPlayer.reset();
-        mMediaPlayer.release();
+        Log.d(TAG, "onPause");
+        mM.pause();
     }
 
     @Override
     protected void onStop()
     {
         super.onStop();
-        if (mMediaPlayer != null) {
-            mMediaPlayer.release();
-            mMediaPlayer = null;
+        Log.d(TAG, "onStop");
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate");
+        setContentView(R.layout.activity_main);
+        if (mM != null) {
+            mM.release();
+            mM.start(this);
         }
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_main);
+    public void finish() {
+        super.finish();
+        Log.d(TAG, "finish");
+        mM.release();
     }
+
 }
