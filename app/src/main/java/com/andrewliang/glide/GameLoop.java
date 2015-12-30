@@ -2,7 +2,6 @@ package com.andrewliang.glide;
 
 import android.os.Message;
 import android.util.Log;
-import android.os.Handler;
 import java.lang.Exception;
 import java.lang.InterruptedException;
 import java.lang.Math;
@@ -13,8 +12,7 @@ import java.lang.Thread;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class GameLoop implements Runnable
-{
+public class GameLoop implements Runnable {
     //view/graphics stuff
     private final GameView gameView;
 
@@ -89,41 +87,42 @@ public class GameLoop implements Runnable
             int framesSkipped;  //number of frame renders being skipped when we're behind
 
             while (gameIsRunning) {
+                Log.d("gameLoop", "iterated");
                 try {
+                    // get iteration start time and reset skipped frames
                     beginTime = System.currentTimeMillis();
-                    framesSkipped = 0;                      //reset the frames skipped
+                    framesSkipped = 0;
 
-                    //Log.d("GameLoop", "foods width" + gameView.getMeasuredWidth());
+                    // update state of the game - food position, player position, and score, then draw
                     updateState();
 
-
+                    // get the update time in ms
                     timeDiff = System.currentTimeMillis() - beginTime;
                     sleepTime = (int) (FRAME_PERIOD - timeDiff);
 
-                    // check if there is left over time in the frame period
+                    // if there is left over time in the frame period then sleep
                     if (sleepTime > 0){
                         try {
                             //sleep the thread for sleepTime ms
                             Thread.sleep(sleepTime);
                         }
                         catch (InterruptedException e) {
-                            Log.d("GameLoop", "1st catch " + e.getMessage());
+                            //Log.d("GameLoop", e.getMessage());
                         }
                     }
 
+                    // if the update time took longer than a frame period, then skip frames, i.e. update without rendering
                     while (sleepTime < 0 && framesSkipped < MAX_FRAME_SKIPS) {
-                        //UPDATE GAME STATE WITHOUT RENDERING
                         updateState();
                         generateFood();
-                        checkCollision(foods, player);
+                        checkCollision();
                         player.updatePlayer(viewWidth, viewHeight);
-                        sleepTime += FRAME_PERIOD;      //sleepTime becomes the time difference between the next frame and the last render
-                        framesSkipped++;                //add another skipped frame
+                        sleepTime += FRAME_PERIOD;//sleepTime becomes the time difference between the next frame and the last render
+                        framesSkipped++;
                     }
                 }
                 catch (Exception e) {
-                    Log.d("GameLoop", "2nd catch " + e.getMessage());
-                    e.printStackTrace();
+                    //Log.d("GameLoop", e.getMessage());
                 }
             }
         }
@@ -131,7 +130,7 @@ public class GameLoop implements Runnable
 
     private void updateState() {
         player.updatePlayer(viewWidth, viewHeight);
-        checkCollision(foods, player);
+        checkCollision();
 
         //update game state (just updating the player for now)
         generateFood();
@@ -144,26 +143,22 @@ public class GameLoop implements Runnable
                 foodsToRemove.add(f);
             }
         }
-
         for (Food f:foodsToRemove){
             foods.remove(f);
         }
+
         //package the updated foods and player into a box to send as a message to the handler in gameview
         Box<ArrayList<Food>, Player, String, String, String> messageBox = new Box<ArrayList<Food>, Player, String, String, String>();
         messageBox.setFoods(foods);
         messageBox.setPlayer(player);
-        String scoreString = "Score: ";
-        messageBox.setScoreString(scoreString + playerScore);
-        String livesString = "Lives: ";
-        messageBox.setLivesString(livesString + playerLives);
-        String highScoreString = "High Score: ";
-        messageBox.setHighScoreString(highScoreString + gameView.getGameActivity().getPrefs().getInt("highScore", highScore));
+        messageBox.setScoreString("Score: " + Integer.toString(playerScore));
+        messageBox.setLivesString("Lives: " + Integer.toString(playerLives));
+        messageBox.setHighScoreString("High Score: " + gameView.getGameActivity().getPrefs().getInt("highScore", highScore));
 
-        //to render the game state, package current game info (just the player for now) and send it to the handler in GameView
+        //to render the game state, package current game data and send it to the handler in GameView
         Message gameState = Message.obtain();
         gameState.obj = messageBox;
         gameView.getMyDrawingHandler().sendMessage(gameState);
-
         checkDeath();
     }
 
@@ -182,10 +177,9 @@ public class GameLoop implements Runnable
         }
     }
 
-    private void checkCollision(ArrayList<Food> foods, Player player) {
+    private void checkCollision() {
         double collisionParameter;
-        double[] distancesSquared;
-        distancesSquared = new double[2];
+        double[] distancesSquared = new double[2];
         Vector2 FoodCenter;
         Vector2 VP;
         Vector2 VW;
@@ -207,8 +201,7 @@ public class GameLoop implements Runnable
                 distancesSquared[0] = FoodCenter.getDistanceSquaredTo(ClosestPointOnSegment);   //get distance from food to closest point
                 distancesSquared[1] = 0;
 
-                if (distancesSquared[0] <= (Math.pow(f.getFoodRadius(), 2)))
-                {
+                if (distancesSquared[0] <= (Math.pow(f.getFoodRadius(), 2))) {
                     foodsToRemove.add(f);
                     updateScore(f);
                 }
@@ -217,8 +210,7 @@ public class GameLoop implements Runnable
                 distancesSquared[0] = FoodCenter.getDistanceSquaredTo(EndPoint1);
                 distancesSquared[1] = FoodCenter.getDistanceSquaredTo(EndPoint2);
 
-                if (distancesSquared[0] <= Math.pow(f.getFoodRadius(), 2) || distancesSquared[1] <= Math.pow(f.getFoodRadius(), 2))
-                {
+                if (distancesSquared[0] <= Math.pow(f.getFoodRadius(), 2) || distancesSquared[1] <= Math.pow(f.getFoodRadius(), 2)) {
                     foodsToRemove.add(f);
                     updateScore(f);
                 }
@@ -228,18 +220,32 @@ public class GameLoop implements Runnable
         for (Food f: foodsToRemove){
             foods.remove(f);
         }
-
     }
 
     private void updateScore(Food f) {
         if (f.getFoodType() == 0){  // Green
             playerScore += f.getSpeed()*4;
-
         }
         else if (f.getFoodType() == 1){  // Red
-            if (playerScore != 0){playerScore -= Math.abs(f.getSpeed() - 5);}
-            if (playerScore < 0){playerScore = 0;}  // Prevents negative score
+            if (playerScore != 0)playerScore -= Math.abs(f.getSpeed() - 5);
+            if (playerScore < 0) playerScore = 0;  // Prevents negative score
             playerLives -= 1;
+        }
+        setHighScore();
+    }
+
+    private void setHighScore()
+    {
+        highScore = playerScore;
+        if (highScore > 0)  //we have a valid score
+        {
+            int lastHighScore = gameView.getGameActivity().getPrefs().getInt("highScore", 0);
+
+            if (playerScore > lastHighScore)
+            {
+                gameView.getGameActivity().getEditor().putInt("highScore", playerScore);
+                gameView.getGameActivity().getEditor().commit();
+            }
         }
     }
 
@@ -250,6 +256,5 @@ public class GameLoop implements Runnable
             deathMessage.arg1 = 1;      //indicates death
             gameView.getGameActivity().getMyGameLoopHandler().sendMessage(deathMessage);
         }
-
     }
 }

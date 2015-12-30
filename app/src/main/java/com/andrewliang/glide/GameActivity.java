@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import java.lang.ref.WeakReference;
 
 public class GameActivity extends Activity {
@@ -35,7 +34,6 @@ public class GameActivity extends Activity {
 
     // UI variables
     private GameView gameView;
-    private View buttonLayout;
     private ImageButton pauseButton;
     private ImageButton rightButton;
     private ImageButton leftButton;
@@ -50,28 +48,23 @@ public class GameActivity extends Activity {
     public SharedPreferences.Editor getEditor() {return this.editor;}
 
     @Override
-    protected void onResume() {
-        Log.d("GameActivity", "onResume");
-        super.onResume();
-        //mMediaPlayer = MediaPlayer.create(this, R.raw.frankum_loop001e);
-        //mMediaPlayer.setLooping(true);
-        //mMediaPlayer.start();
-
-        //resume the game loop
-        Log.d("onResume", Boolean.toString(activityPaused));
-        Log.d("pauseButtonDown", Boolean.toString(pauseButtonDown));
-
-
-        if (activityPaused){
-            pauseButton.callOnClick();
-        }
-
-    }
-
-    @Override
     protected void onPause() {
         Log.d("GameActivity", "onPause");
-        super.onPause();
+        //pause the game loop if the game is not already paused
+        if (!activityPaused) {
+            try {
+                gameView.pause();
+                rightButton.setEnabled(false);
+                leftButton.setEnabled(false);
+                pauseButton.setImageDrawable(getResources().getDrawable(R.drawable.resume_button));
+                pauseText.setVisibility(TextView.VISIBLE);
+                homeButton.setVisibility(Button.VISIBLE);
+                restartButton.setVisibility(Button.VISIBLE);
+            } catch (Exception e) {
+                Log.d("onPause", e.getMessage());
+            }
+            activityPaused = true;
+        }
         //release the music resource
         mHandler.removeCallbacks(null);
 
@@ -81,10 +74,16 @@ public class GameActivity extends Activity {
             mMediaPlayer.release();
         }
 
-        //pause the game loop
-        if (!activityPaused) {
-            pauseButton.callOnClick();
-        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d("GameActivity", "onResume");
+        super.onResume();
+        mMediaPlayer = MediaPlayer.create(this, R.raw.frankum_loop001e);
+        mMediaPlayer.setLooping(true);
+        mMediaPlayer.start();
     }
 
     @Override
@@ -109,15 +108,18 @@ public class GameActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         // create the gameView object, and restore it to its previous state if needed
-        gameView = new GameView(this, this);
         Object data = getLastNonConfigurationInstance();
         if (data != null){
+            gameView = new GameView(this, this);
             gameView.myOnRestoreInstanceState((Bundle) data);
+        }
+        else{
+            gameView = new GameView(this, this);
         }
 
         // set up the activity layout
         final FrameLayout gameLayout = new FrameLayout(this);
-        buttonLayout = getLayoutInflater().inflate(R.layout.activity_game, null);
+        View buttonLayout = getLayoutInflater().inflate(R.layout.activity_game, null);
         gameLayout.addView(gameView);
         gameLayout.addView(buttonLayout);
         setContentView(gameLayout);
@@ -136,6 +138,7 @@ public class GameActivity extends Activity {
         restartButton = (ImageButton) findViewById(R.id.restart_button);
         pauseButton = (ImageButton) findViewById(R.id.pause_button);
         setButtonActions();
+
     }
 
     // the handler for communicating with the game loop
@@ -143,7 +146,7 @@ public class GameActivity extends Activity {
         private final WeakReference<GameActivity> gameActivityWeakReference;
 
         public gameLoopMessageHandler(GameActivity activity){
-            gameActivityWeakReference = new WeakReference<GameActivity>(activity);
+            gameActivityWeakReference = new WeakReference<>(activity);
         }
 
         @Override
@@ -272,7 +275,7 @@ public class GameActivity extends Activity {
                 } else {
                     rightButton.setEnabled(false);
                     leftButton.setEnabled(false);
-                    pauseButton.setImageDrawable(getResources().getDrawable(R.drawable.pause_button));
+                    pauseButton.setImageDrawable(getResources().getDrawable(R.drawable.resume_button));
                     gameView.pause();
                     pauseButtonDown = true;
                     pauseText.setVisibility(View.VISIBLE);

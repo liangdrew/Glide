@@ -13,7 +13,6 @@ import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
-
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
@@ -40,6 +39,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         s = this.getHolder();
         this.gameActivity = a;
 
+        // get screen dimensions
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
@@ -47,19 +47,17 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         viewWidth2 = size.x;
         viewHeight2 = size.y;
 
-        gameLoop = new GameLoop(this, viewWidth2, viewHeight2);
-
         // set paints
         TEXT_PAINT.setColor(Color.BLACK);
         TEXT_PAINT.setAntiAlias(true);
-        TEXT_PAINT.setTextSize(viewWidth2 / 25);  // Consider making text size constant
+        TEXT_PAINT.setTextSize(viewWidth2 / 25);
         BACKGROUND_PAINT.setColor(Color.WHITE);
 
-
+        // create game loop and game thread, and start thread if we're not recreating the
+        gameLoop = new GameLoop(this, viewWidth2, viewHeight2);
         gameLoop.setGameIsRunning(true);
         gameThread = new Thread(gameLoop);
         gameThread.start();
-
 
     }
 
@@ -106,12 +104,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public GameLoop getGameLoop() {return this.gameLoop;}
     public GameActivity getGameActivity() {return this.gameActivity;}
 
-
+    // handler for receiving draw data from the game loop thread
     public static class drawingHandler extends Handler{
         private final WeakReference<GameView> gameViewWeakReference;
 
         public drawingHandler(GameView g){
-            gameViewWeakReference = new WeakReference<GameView>(g);
+            gameViewWeakReference = new WeakReference<>(g);
         }
 
         @Override
@@ -126,44 +124,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             g.drawGame();
         }
     }
-
     private final drawingHandler myDrawingHandler = new drawingHandler(this);
     public drawingHandler getMyDrawingHandler(){return myDrawingHandler;}
-    
-    public void pause() {
-        Log.d("gameView", "pause");
-        gameLoop.setGameIsRunning(false);
 
-        try {
-            gameThread.join();
-        }
-        catch (InterruptedException e){Log.d("gameView pause", e.getMessage());}
-
-        gameThread = null;
-    }
-
-    public void resume()
-    {
-        Log.d("gameView", "resume");
-        gameLoop.setGameIsRunning(true);
-        gameThread = new Thread(gameLoop);
-        gameThread.start();
-    }
-    public void restartGame()
-    {
-        Log.d("gameView", "restart");
-        gameLoop = null;
-        gameThread = null;
-
-        gameLoop = new GameLoop(this, viewWidth2, viewHeight2);
-        gameLoop.setGameIsRunning(true);
-        gameThread = new Thread(gameLoop);
-        gameThread.start();
-    }
-
-
-    private void drawGame()
-    {
+    private void drawGame() {
         //drawing sequence
         canvas = null;                                      //clear the canvas
         canvas = s.lockCanvas(null);                        //set the canvas to the canvas we can draw returned from lockCanvas()
@@ -181,19 +145,45 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+    // lifecycle methods
+
+    public void pause() {
+        Log.d("gameView", "pause");
+        gameLoop.setGameIsRunning(false);
+
+        try {
+            gameThread.join();
+        }
+        catch (InterruptedException e){Log.d("gameView pause", e.getMessage());}
+
+        gameThread = null;
+    }
+
+    public void resume() {
+        Log.d("gameView", "resume");
+        gameLoop.setGameIsRunning(true);
+        gameThread = new Thread(gameLoop);
+        gameThread.start();
+    }
+
+    public void restartGame() {
+        Log.d("gameView", "restart");
+        gameLoop = null;
+        gameThread = null;
+
+        gameLoop = new GameLoop(this, viewWidth2, viewHeight2);
+        gameLoop.setGameIsRunning(true);
+        gameThread = new Thread(gameLoop);
+        gameThread.start();
+    }
+
     //override some interface methods because we implemented the SurfaceHolder.callback interface
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        Log.d("gameView", "surface created");
+        if (canvas != null) {drawGame(); return;}
     }
-
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        Log.d("gameView", "surface changed");
-    }
-
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
     @Override
-    public void surfaceDestroyed(SurfaceHolder holder){
-        Log.d("gameView", "surface destroyed");
-    }
+    public void surfaceDestroyed(SurfaceHolder holder){}
 }

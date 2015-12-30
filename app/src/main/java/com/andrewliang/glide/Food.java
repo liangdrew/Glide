@@ -17,6 +17,7 @@ class Food
     private final int foodRadius;
     private final int foodType;   //type of food - atm, either GREEN_FOOD ( = 0) OR RED_FOOD (= 1)
     private int foodColor;  //red or green, depending on foodType
+    private Paint foodPaint = new Paint();
 
     Food(int speed, int xPos, int yPos, int radius, int type)
     {
@@ -41,6 +42,8 @@ class Food
 
         int[] FOOD_COLORS = {Color.rgb(pinkR, pinkG, pinkB), Color.rgb(greyR, greyG, greyB)};
         this.foodColor = FOOD_COLORS[foodType];
+        foodPaint.setColor(foodColor);
+        foodPaint.setAntiAlias(true);
     }
 
     public int getXPos() {return xPos;}
@@ -51,12 +54,8 @@ class Food
 
     public void updateFoodPos() {yPos += speed;}
 
-    public void drawFood(Canvas c)
-    {
-        Paint paint = new Paint();
-        paint.setColor(this.foodColor);
-        paint.setAntiAlias(true);
-        c.drawCircle((float) xPos, (float) yPos, (float) foodRadius, paint);
+    public void drawFood(Canvas c) {
+        c.drawCircle((float) xPos, (float) yPos, (float) foodRadius, foodPaint);
     }
 
 }

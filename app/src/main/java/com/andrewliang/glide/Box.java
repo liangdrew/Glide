@@ -1,7 +1,6 @@
 package com.andrewliang.glide;
 
-class Box<T1, T2, T3, T4, T5>
-{
+class Box<T1, T2, T3, T4, T5> {
     private T1 foods;
     private T2 player;
     private T3 scoreString;
