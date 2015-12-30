@@ -13,6 +13,8 @@ import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
+
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
@@ -104,21 +106,30 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public GameLoop getGameLoop() {return this.gameLoop;}
     public GameActivity getGameActivity() {return this.gameActivity;}
 
-    final Handler drawingHandler = new Handler()
-    {
-        @Override
-        public void handleMessage(Message msg)
-        {
-            Box<ArrayList<Food>,Player,String, String, String> thingsToDraw = (Box)msg.obj;
-            playerToDraw = thingsToDraw.getPlayer();
-            foodsToDraw = thingsToDraw.getFoods();
-            scoreToDraw = thingsToDraw.getScoreString();
-            livesToDraw = thingsToDraw.getLivesString();
-            highScoreToDraw = thingsToDraw.getHighScoreString();
-            drawGame();
-        }
-    };
 
+    public static class drawingHandler extends Handler{
+        private final WeakReference<GameView> gameViewWeakReference;
+
+        public drawingHandler(GameView g){
+            gameViewWeakReference = new WeakReference<GameView>(g);
+        }
+
+        @Override
+        public void handleMessage(Message msg){
+            GameView g = gameViewWeakReference.get();
+            Box<ArrayList<Food>,Player,String, String, String> thingsToDraw = (Box)msg.obj;
+            g.playerToDraw = thingsToDraw.getPlayer();
+            g.foodsToDraw = thingsToDraw.getFoods();
+            g.scoreToDraw = thingsToDraw.getScoreString();
+            g.livesToDraw = thingsToDraw.getLivesString();
+            g.highScoreToDraw = thingsToDraw.getHighScoreString();
+            g.drawGame();
+        }
+    }
+
+    private final drawingHandler myDrawingHandler = new drawingHandler(this);
+    public drawingHandler getMyDrawingHandler(){return myDrawingHandler;}
+    
     public void pause() {
         Log.d("gameView", "pause");
         gameLoop.setGameIsRunning(false);

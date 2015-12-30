@@ -18,6 +18,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.lang.ref.WeakReference;
+
 public class GameActivity extends Activity {
     private static final double DELTA_ANGLE = Math.PI/40;
     private MediaPlayer mMediaPlayer;
@@ -48,8 +50,7 @@ public class GameActivity extends Activity {
     public SharedPreferences.Editor getEditor() {return this.editor;}
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         Log.d("GameActivity", "onResume");
         super.onResume();
         //mMediaPlayer = MediaPlayer.create(this, R.raw.frankum_loop001e);
@@ -68,8 +69,7 @@ public class GameActivity extends Activity {
     }
 
     @Override
-    protected void onPause()
-    {
+    protected void onPause() {
         Log.d("GameActivity", "onPause");
         super.onPause();
         //release the music resource
@@ -88,8 +88,7 @@ public class GameActivity extends Activity {
     }
 
     @Override
-    protected void onStop() // When user presses home button on device
-    {
+    protected void onStop() {
         Log.d("GameActivity", "onStop");
         super.onStop();
 
@@ -101,8 +100,7 @@ public class GameActivity extends Activity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         Log.d("GameActivity", "onCreate");
         super.onCreate(savedInstanceState);
 
@@ -140,11 +138,22 @@ public class GameActivity extends Activity {
         setButtonActions();
     }
 
-    final Handler gameLoopMessageHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            if (msg.arg1 == 1) die();
+    // the handler for communicating with the game loop
+    public static class gameLoopMessageHandler extends Handler{
+        private final WeakReference<GameActivity> gameActivityWeakReference;
+
+        public gameLoopMessageHandler(GameActivity activity){
+            gameActivityWeakReference = new WeakReference<GameActivity>(activity);
         }
-    };
+
+        @Override
+        public void handleMessage(Message msg){
+            GameActivity g = gameActivityWeakReference.get();
+            if (g != null) g.die();
+        }
+    }
+    private final gameLoopMessageHandler myGameLoopHandler = new gameLoopMessageHandler(this);
+    public gameLoopMessageHandler getMyGameLoopHandler(){return myGameLoopHandler;}
 
     private void die() {
         // Check if we need to set a new high score
@@ -172,8 +181,7 @@ public class GameActivity extends Activity {
     //create the runnables for changing the angle of the player
     final Runnable TiltPlayerRight = new Runnable() {
         @Override
-        public void run()
-        {
+        public void run() {
             gameView.getGameLoop().getPlayer().changeAngle(-DELTA_ANGLE);
             rightHandler.postDelayed(this, 30);
         }

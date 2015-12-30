@@ -2,7 +2,7 @@ package com.andrewliang.glide;
 
 import android.os.Message;
 import android.util.Log;
-
+import android.os.Handler;
 import java.lang.Exception;
 import java.lang.InterruptedException;
 import java.lang.Math;
@@ -159,10 +159,10 @@ public class GameLoop implements Runnable
         String highScoreString = "High Score: ";
         messageBox.setHighScoreString(highScoreString + gameView.getGameActivity().getPrefs().getInt("highScore", highScore));
 
-        //to render the game state, package current game info (just the player for now) and send it to the handler in GameView which draws the player
-        Message gameState = Message.obtain();           //obtain a message from a global pool of recycled messages to avoid creating a new one each time
-        gameState.obj = messageBox;                         //set the message as the game loop's player object
-        gameView.drawingHandler.sendMessage(gameState); //send the message containing the player to the GameView handler
+        //to render the game state, package current game info (just the player for now) and send it to the handler in GameView
+        Message gameState = Message.obtain();
+        gameState.obj = messageBox;
+        gameView.getMyDrawingHandler().sendMessage(gameState);
 
         checkDeath();
     }
@@ -248,7 +248,7 @@ public class GameLoop implements Runnable
             setGameIsRunning(false);
             Message deathMessage = Message.obtain();
             deathMessage.arg1 = 1;      //indicates death
-            gameView.getGameActivity().gameLoopMessageHandler.sendMessage(deathMessage);
+            gameView.getGameActivity().getMyGameLoopHandler().sendMessage(deathMessage);
         }
 
     }
