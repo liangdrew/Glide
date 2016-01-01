@@ -2,10 +2,7 @@ package com.andrewliang.glide;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Image;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,19 +20,15 @@ import android.widget.TextView;
 public class GameActivity extends Activity
 {
     private static final double DELTA_ANGLE = Math.PI/40;
-//    private MediaPlayer mMediaPlayer;
 
-    private final Handler mHandler = new Handler();
     private boolean activityPaused = false;
     private boolean pauseButtonDown = false;
 
     // Pause "menu" buttons and text declaration
-//    private TextView pauseText;
     private TextView highScoreText;
     private Button restartButton;
     private Button homeButton;
     private ImageView pausedTitle;
-    private ImageView gameoverTitle;
 
     // UI variables
     private GameView gameView;
@@ -82,12 +75,6 @@ public class GameActivity extends Activity
 
         MainActivity.getmM().pause();
 
-        //release the music resource
-        mHandler.removeCallbacks(null);
-//        mMediaPlayer.stop();
-//        mMediaPlayer.reset();
-//        mMediaPlayer.release();
-
         //pause the game loop
         if (!activityPaused)
         {
@@ -102,11 +89,6 @@ public class GameActivity extends Activity
     {
         super.onStop();
         Log.d("GameActivity", "onStop");
-//        release the music resource
-//        if (mMediaPlayer != null) {
-//            mMediaPlayer.release();
-//            mMediaPlayer = null;
-//        }
 
         // Have the user return to a paused app
 //        gameView.pause();
@@ -136,7 +118,6 @@ public class GameActivity extends Activity
 
         highScoreText = (TextView) findViewById(R.id.new_high_score_text);
         pausedTitle = (ImageView) findViewById(R.id.pausedTitle);
-        gameoverTitle = (ImageView) findViewById(R.id.gameoverTitle);
 
         rightButton = (ImageButton) findViewById(R.id.right_button);
 
@@ -204,28 +185,27 @@ public class GameActivity extends Activity
 
         });
 
-        //home button - returns to main menu (main activity)
         homeButton = (Button) findViewById(R.id.home_button);
         homeButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-//                startActivity(new Intent(GameActivity.this, MainActivity.class));       //start the main activity
+                MainActivity.getmM().start(gameView.getGameActivity());
                 setContentView(R.layout.activity_main);
             }
         });
 
-        //restart button
         restartButton = (Button) findViewById(R.id.restart_button);
         restartButton.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
             {
 
+                MainActivity.getmM().start(gameView.getGameActivity());
                 highScoreText.setVisibility(TextView.GONE);
                 pauseButtonDown = false;
                 activityPaused = false;
-                pauseButton.setImageDrawable(getResources().getDrawable(R.drawable.pause_button));
                 pausedTitle.setVisibility(View.GONE);
-                gameoverTitle.setVisibility(View.GONE);
+                pausedTitle.setImageResource(R.drawable.paused_title);
+                pauseButton.setImageResource(R.drawable.pause_button);
                 homeButton.setVisibility(Button.GONE);
                 restartButton.setVisibility(Button.GONE);
                 rightButton.setEnabled(true);
@@ -243,24 +223,24 @@ public class GameActivity extends Activity
                 if (activityPaused) {
                     rightButton.setEnabled(true);
                     leftButton.setEnabled(true);
-                    pauseButton.setImageDrawable(getResources().getDrawable(R.drawable.pause_button));
+                    pauseButton.setImageResource(R.drawable.pause_button);
                     gameView.resume();
                     pauseButtonDown = false;
                     pausedTitle.setVisibility(View.GONE);
-//                    gameoverTitle.setVisibility(View.GONE);
                     restartButton.setVisibility(Button.GONE);
                     homeButton.setVisibility(Button.GONE);
+                    MainActivity.getmM().start(gameView.getGameActivity());
+
                 } else {
                     rightButton.setEnabled(false);
                     leftButton.setEnabled(false);
-                    pauseButton.setImageDrawable(getResources().getDrawable(R.drawable.play_button_image));
+                    pauseButton.setImageResource(R.drawable.play_button_image);
                     gameView.pause();
                     pauseButtonDown = true;
-//                    String pauseString = "Paused";
-//                    pauseText.setText(pauseString);
                     pausedTitle.setVisibility(View.VISIBLE);
                     restartButton.setVisibility(Button.VISIBLE);
                     homeButton.setVisibility(Button.VISIBLE);
+                    MainActivity.getmM().pause();
                 }
                 activityPaused = !activityPaused;       //invert the activity state
 
@@ -282,26 +262,25 @@ public class GameActivity extends Activity
 
     private void die()
     {
-//        Log.d("GameActivity", "current Highscore:" + gameView.getGameLoop().getPlayerScore());
-//        Log.d("GameActivity", "prefs Highscore:" + prefs.getInt("highScore", -999));
-        if (gameView.getGameLoop().getPlayerScore() > prefs.getInt("highScore", -999))  // Set new high score
-        {
-//            Log.d("GameActivity", "new high score");
-            gameView.getGameActivity().getEditor().putInt("highScore", gameView.getGameLoop().getPlayerScore());
-            gameView.getGameActivity().getEditor().commit();
-            highScoreText.setText("New high score: " + gameView.getGameLoop().getPlayerScore());
-            highScoreText.setVisibility(TextView.VISIBLE);
+        if (gameView.getGameLoop().getPlayerScore() > 0) {   // Verify player has achieved a valid high score
+            if (gameView.getGameLoop().getPlayerScore() > prefs.getInt("highScore", -999))  // Set new high score
+            {
+                gameView.getGameActivity().getEditor().putInt("highScore", gameView.getGameLoop().getPlayerScore());
+                gameView.getGameActivity().getEditor().commit();
+                highScoreText.setText("New high score: " + gameView.getGameLoop().getPlayerScore());
+                highScoreText.setVisibility(TextView.VISIBLE);
+            }
         }
         activityPaused = false;
         rightButton.setEnabled(false);
         leftButton.setEnabled(false);
 
-//        String gameOverText = "Game Over";
-//        pauseText.setText(gameOverText);
-        gameoverTitle.setVisibility(View.VISIBLE);
+        pausedTitle.setImageResource(R.drawable.gameover_title);
+        pausedTitle.setVisibility(View.VISIBLE);
         homeButton.setVisibility(Button.VISIBLE);
         restartButton.setVisibility(Button.VISIBLE);
 
         pauseButtonDown = true;
+        MainActivity.getmM().pause();
     }
 }

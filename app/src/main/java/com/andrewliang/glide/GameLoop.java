@@ -24,7 +24,7 @@ public class GameLoop implements Runnable
     private final static double PROBABILITY_OF_RED_FOOD_SPAWN = 0.01;
     private final int viewWidth;
     private final int viewHeight;
-    private int highScore;
+//    private int highScore;
     private final ArrayList<Food> foods = new ArrayList<Food>();
 
     //game state variables
@@ -139,7 +139,7 @@ public class GameLoop implements Runnable
         String livesString = "Lives: ";
         messageBox.setLivesString(livesString + playerLives);
         String highScoreString = "High Score: ";
-        messageBox.setHighScoreString(highScoreString + gameView.getGameActivity().getPrefs().getInt("highScore", highScore));
+        messageBox.setHighScoreString(highScoreString + gameView.getGameActivity().getPrefs().getInt("highScore", 0)); // Set default to 0 in case there is no high score stored yet
 
         //to render the game state, package current game info (just the player for now) and send it to the handler in GameView which draws the player
         Message gameState = Message.obtain();           //obtain a message from a global pool of recycled messages to avoid creating a new one each time
@@ -234,32 +234,10 @@ public class GameLoop implements Runnable
     {
         if (playerLives == 0)
         {
-//            highScore = playerScore;
-//            setHighScore();
             setGameIsRunning(false);
             Message deathMessage = Message.obtain();
             deathMessage.arg1 = 1;      //indicates death
             gameView.getGameActivity().gameLoopMessageHandler.sendMessage(deathMessage);
         }
-
     }
-/*
-    private void setHighScore()
-    {
-        if (playerScore > 0)
-//        if (highScore > 0)  // Assert that user has achieved a valid score
-        {
-            int lastHighScore = gameView.getGameActivity().getPrefs().getInt("highScore", -999);
-
-            if (playerScore > lastHighScore)
-//            if (highScore > lastHighScore)
-            {
-                gameView.getGameActivity().getEditor().putInt("highScore", playerScore);
-//                gameView.getGameActivity().getEditor().putInt("highScore", highScore);
-                gameView.getGameActivity().getEditor().commit();
-            }
-        }
-
-    }*/
 }
-
