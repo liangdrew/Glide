@@ -21,7 +21,6 @@ public class GameLoop implements Runnable {
     private final static double PROBABILITY_OF_RED_FOOD_SPAWN = 0.005;
     private final int viewWidth;
     private final int viewHeight;
-    private int highScore;
     private final  ArrayList<Food> foods = new ArrayList<Food>();
 
     //player variables
@@ -87,7 +86,6 @@ public class GameLoop implements Runnable {
             int framesSkipped;  //number of frame renders being skipped when we're behind
 
             while (gameIsRunning) {
-                Log.d("gameLoop", "iterated");
                 try {
                     // get iteration start time and reset skipped frames
                     beginTime = System.currentTimeMillis();
@@ -122,7 +120,7 @@ public class GameLoop implements Runnable {
                     }
                 }
                 catch (Exception e) {
-                    //Log.d("GameLoop", e.getMessage());
+                    e.printStackTrace();
                 }
             }
         }
@@ -148,12 +146,11 @@ public class GameLoop implements Runnable {
         }
 
         //package the updated foods and player into a box to send as a message to the handler in gameview
-        Box<ArrayList<Food>, Player, String, String, String> messageBox = new Box<ArrayList<Food>, Player, String, String, String>();
+        Box<ArrayList<Food>, Player, String, String> messageBox = new Box<>();
         messageBox.setFoods(foods);
         messageBox.setPlayer(player);
         messageBox.setScoreString("Score: " + Integer.toString(playerScore));
         messageBox.setLivesString("Lives: " + Integer.toString(playerLives));
-        messageBox.setHighScoreString("High Score: " + gameView.getGameActivity().getPrefs().getInt("highScore", highScore));
 
         //to render the game state, package current game data and send it to the handler in GameView
         Message gameState = Message.obtain();
@@ -230,22 +227,6 @@ public class GameLoop implements Runnable {
             if (playerScore != 0)playerScore -= Math.abs(f.getSpeed() - 5);
             if (playerScore < 0) playerScore = 0;  // Prevents negative score
             playerLives -= 1;
-        }
-        setHighScore();
-    }
-
-    private void setHighScore()
-    {
-        highScore = playerScore;
-        if (highScore > 0)  //we have a valid score
-        {
-            int lastHighScore = gameView.getGameActivity().getPrefs().getInt("highScore", 0);
-
-            if (playerScore > lastHighScore)
-            {
-                gameView.getGameActivity().getEditor().putInt("highScore", playerScore);
-                gameView.getGameActivity().getEditor().commit();
-            }
         }
     }
 

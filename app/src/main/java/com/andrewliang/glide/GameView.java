@@ -53,6 +53,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         TEXT_PAINT.setTextSize(viewWidth2 / 25);
         BACKGROUND_PAINT.setColor(Color.WHITE);
 
+        // set the high score, which is only changed when the player dies
+        int highScore = a.getPrefs().getInt("highScore", 0);
+        highScoreToDraw = "High Score: " + Integer.toString(highScore);
+
         // create game loop and game thread, and start thread if we're not recreating the
         gameLoop = new GameLoop(this, viewWidth2, viewHeight2);
         gameLoop.setGameIsRunning(true);
@@ -115,12 +119,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         @Override
         public void handleMessage(Message msg){
             GameView g = gameViewWeakReference.get();
-            Box<ArrayList<Food>,Player,String, String, String> thingsToDraw = (Box)msg.obj;
+            Box<ArrayList<Food>,Player,String, String> thingsToDraw = (Box)msg.obj;
             g.playerToDraw = thingsToDraw.getPlayer();
             g.foodsToDraw = thingsToDraw.getFoods();
             g.scoreToDraw = thingsToDraw.getScoreString();
             g.livesToDraw = thingsToDraw.getLivesString();
-            g.highScoreToDraw = thingsToDraw.getHighScoreString();
             g.drawGame();
         }
     }

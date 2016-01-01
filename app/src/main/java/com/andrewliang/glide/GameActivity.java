@@ -107,6 +107,10 @@ public class GameActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        // HighScores
+        prefs = this.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        editor = prefs.edit();
+
         // create the gameView object, and restore it to its previous state if needed
         Object data = getLastNonConfigurationInstance();
         if (data != null){
@@ -123,13 +127,8 @@ public class GameActivity extends Activity {
         gameLayout.addView(gameView);
         gameLayout.addView(buttonLayout);
         setContentView(gameLayout);
-
-        // HighScores
-        prefs = this.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        editor = prefs.edit();
-        highScoreText = (TextView) findViewById(R.id.new_high_score_text);
         pauseText = (TextView) findViewById(R.id.pause_text);
-        if (pauseText == null) Log.d("GameActivity", "pauseText null");
+        highScoreText = (TextView) findViewById(R.id.new_high_score_text);
 
         // create buttons and define their actions
         rightButton = (ImageButton) findViewById(R.id.right_button);
