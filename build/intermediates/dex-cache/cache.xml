@@ -1,2 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" />
+<items version="2" >
+
+    <item
+        jar="/Users/andrewliang/Documents/Glide/app/build/intermediates/exploded-aar/com.android.support/design/22.2.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="1821601ddbec5ff125653097812823388700af74">
+        <dex dex="/Users/andrewliang/Documents/Glide/app/build/intermediates/pre-dexed/debug/com.android.support-design-22.2.1_1b4be3533409893d4ce63fca391b8528f032ed14.jar" />
+    </item>
+    <item
+        jar="/Users/andrewliang/Documents/Glide/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/jars/libs/internal_impl-22.2.1.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="c471eaaba13ff64f6e0383d1c30a9cdc9a97efeb">
+        <dex dex="/Users/andrewliang/Documents/Glide/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.1_13a2979055db9facb609ade30a98a573ec0887bc.jar" />
+    </item>
+    <item
+        jar="/Users/andrewliang/Documents/Glide/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="4486e953d1f35f8ccab098b1dd67146366d5f731">
+        <dex dex="/Users/andrewliang/Documents/Glide/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-22.2.1_1f15a82c904c6668f703e1c18f0290fee46db99f.jar" />
+    </item>
+    <item
+        jar="/Users/andrewliang/Documents/Glide/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="f8efd0096475e0daf054267b61544e10dc776503">
+        <dex dex="/Users/andrewliang/Documents/Glide/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-22.2.1_ce9c2052fc373bc79c730b0cf7d59a539c9ec937.jar" />
+    </item>
+    <item
+        jar="/Users/andrewliang/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.1/support-annotations-22.2.1.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="61a0ff5c29295ec56d7e0bd3d25d95dbf71b4b2b">
+        <dex dex="/Users/andrewliang/Documents/Glide/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.1_d7e33fa6aa644ac5fa65ddb46a9fd17e9a44fb24.jar" />
+    </item>
+
+</items>

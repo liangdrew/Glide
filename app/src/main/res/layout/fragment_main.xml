@@ -11,39 +11,25 @@
     android:orientation="vertical"
     android:layout_gravity="center">
 
-    <!--<TextView-->
-        <!--android:id="@+id/title_text"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginBottom="15dp"-->
-        <!--android:layout_marginTop="30dp"-->
-        <!--android:text="@string/app_name"-->
-        <!--android:textAppearance="?android:textAppearanceLarge"-->
-        <!--android:textSize="@dimen/menu_text_size"-->
-        <!--android:layout_gravity="center_horizontal"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--style="@style/Base.Animation.AppCompat.Dialog" />-->
-
     <ImageView
         android:id="@+id/title_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/glide_title"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginBottom="5dp"
         android:layout_gravity="center_horizontal"
         android:layout_centerHorizontal="true"/>
 
     <Button
         android:id="@+id/play_button"
         android:text="@string/play_game_label"
+        android:layout_width="300dp"
+        android:layout_height="55dp"
         android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        android:layout_width="250dp"
-        android:layout_height="60dp"
+        android:textSize="25sp"
         android:background="@drawable/play_button_style"
         android:layout_margin="@dimen/menu_button_margin"
-        android:layout_marginTop="15dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_below="@id/title_text"
@@ -52,10 +38,10 @@
     <Button
         android:id="@+id/about_button"
         android:text="@string/about_label"
+        android:layout_width="300dp"
+        android:layout_height="55dp"
         android:textColor="#636363"
-        android:textSize="20sp"
-        android:layout_width="250dp"
-        android:layout_height="60dp"
+        android:textSize="25sp"
         android:background="@drawable/about_button_style"
         android:layout_margin="@dimen/menu_button_margin"
         android:layout_below="@id/play_button"
