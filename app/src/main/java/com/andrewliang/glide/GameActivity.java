@@ -2,6 +2,7 @@ package com.andrewliang.glide;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,9 +17,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import java.lang.ref.WeakReference;
 
-public class GameActivity extends Activity
-{
+public class GameActivity extends Activity {
     private static final double DELTA_ANGLE = Math.PI/40;
 
     private boolean activityPaused = false;
@@ -35,95 +36,134 @@ public class GameActivity extends Activity
     private ImageButton pauseButton;
     private ImageButton rightButton;
     private ImageButton leftButton;
+    private Handler leftHandler;
+    private Handler rightHandler;
 
     // High Scores data storage variables
     private static final String PREFS_NAME = "MyPrefsFile";
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
-
     public SharedPreferences getPrefs() {return this.prefs;}
     public SharedPreferences.Editor getEditor() {return this.editor;}
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         Log.d("GameActivity", "onResume");
         super.onResume();
 
         MainActivity.getmM().start(this);
-
-        //resume the game loop
-        if (activityPaused && !pauseButtonDown)
-        {
-            try
-            {
-                gameView.resume();
-            }
-            catch (Exception e)
-            {
-                Log.d("onResume", e.getMessage());
-            }
-            activityPaused = false;
-        }
     }
 
     @Override
-    protected void onPause()
-    {
-        super.onPause();
+    protected void onPause() {
+
         Log.d("GameActivity", "onPause");
+        //pause the game loop if the game is not already paused
+        if (!activityPaused) {
+            try {
+                gameView.pause();
+                rightButton.setEnabled(false);
+                leftButton.setEnabled(false);
+                pauseButton.setImageResource(R.drawable.play_button_image);
+                homeButton.setVisibility(Button.VISIBLE);
+                restartButton.setVisibility(Button.VISIBLE);
+            } catch (Exception e) {
+                Log.d("onPause", e.getMessage());
 
-        MainActivity.getmM().pause();
-
-        //pause the game loop
-        if (!activityPaused)
-        {
-            try {gameView.pause();}
-            catch (Exception e) {Log.d("onResume", e.getMessage());}
+            }
             activityPaused = true;
+            MainActivity.getmM().pause();
         }
+        super.onPause();
     }
 
     @Override
-    protected void onStop() // When user presses home button on device
-    {
-        super.onStop();
+    protected void onStop() {
         Log.d("GameActivity", "onStop");
-
-        // Have the user return to a paused app
-//        gameView.pause();
-//        activityPaused = true;
+        super.onStop();
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         Log.d("GameActivity", "onCreate");
-
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE); // requesting to turn the title OFF
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); // making it full screen
 
-        // HighScores
-        prefs = this.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        editor = prefs.edit();
+        // disable activity title and make full screen
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        FrameLayout gameLayout = new FrameLayout(this);
-        gameView = new GameView(this, this);
+        // create the gameView object, and restore it to its previous state if needed
+        Object data = getLastNonConfigurationInstance();
+        if (data != null){
+            gameView = new GameView(this, this);
+            gameView.myOnRestoreInstanceState((Bundle) data);
+        }
+        else{
+            gameView = new GameView(this, this);
+        }
+
+        // set up the activity layout
+        final FrameLayout gameLayout = new FrameLayout(this);
         View buttonLayout = getLayoutInflater().inflate(R.layout.activity_game, null);
-
         gameLayout.addView(gameView);
         gameLayout.addView(buttonLayout);
         setContentView(gameLayout);
 
+        // HighScores
+        prefs = this.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        editor = prefs.edit();
         highScoreText = (TextView) findViewById(R.id.new_high_score_text);
         pausedTitle = (ImageView) findViewById(R.id.pausedTitle);
 
+        // create buttons and define their actions
         rightButton = (ImageButton) findViewById(R.id.right_button);
+        leftButton = (ImageButton) findViewById(R.id.left_button);
+        homeButton = (Button) findViewById(R.id.home_button);
+        restartButton = (Button) findViewById(R.id.restart_button);
+        pauseButton = (ImageButton) findViewById(R.id.pause_button);
+        setButtonActions();
+    }
+
+    // the handler for communicating with the game loop
+    public static class gameLoopMessageHandler extends Handler {
+        private final WeakReference<GameActivity> gameActivityWeakReference;
+
+        public gameLoopMessageHandler(GameActivity activity) {
+            gameActivityWeakReference = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            GameActivity g = gameActivityWeakReference.get();
+            if (g != null) g.die();
+        }
+    }
+
+    private final gameLoopMessageHandler myGameLoopHandler = new gameLoopMessageHandler(this);
+    public gameLoopMessageHandler getMyGameLoopHandler(){return myGameLoopHandler;}
+
+    //create the runnables for changing the angle of the player
+    final Runnable TiltPlayerRight = new Runnable() {
+        @Override
+        public void run() {
+            gameView.getGameLoop().getPlayer().changeAngle(-DELTA_ANGLE);
+            rightHandler.postDelayed(this, 30);
+        }
+    };
+
+    //create the runnable for changing the angle of the player
+    final Runnable TiltPlayerLeft = new Runnable() {
+        @Override
+        public void run() {
+            gameView.getGameLoop().getPlayer().changeAngle(DELTA_ANGLE);
+            leftHandler.postDelayed(this, 30);
+        }
+    };
+
+    private void setButtonActions(){
 
         //set the onClick listener to change the angle by some -dTheta during press, every 30 ms
         rightButton.setOnTouchListener(new View.OnTouchListener() {
-            private Handler rightHandler;
 
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
@@ -141,22 +181,10 @@ public class GameActivity extends Activity
                 return false;
             }
 
-            //create the runnable for changing the angle of the player
-            final Runnable TiltPlayerRight = new Runnable() {
-                @Override
-                public void run()
-                {
-                    gameView.getGameLoop().getPlayer().changeAngle(-DELTA_ANGLE);
-                    rightHandler.postDelayed(this, 30);
-                }
-            };
         });
-
-        leftButton = (ImageButton) findViewById(R.id.left_button);
 
         //set the onClick listener to change the angle by some +dTheta during press, every 30 ms
         leftButton.setOnTouchListener(new View.OnTouchListener() {
-            private Handler leftHandler;
 
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
@@ -173,16 +201,6 @@ public class GameActivity extends Activity
                 }
                 return false;
             }
-
-            //create the runnable for changing the angle of the player
-            final Runnable TiltPlayerLeft = new Runnable() {
-                @Override
-                public void run() {
-                    gameView.getGameLoop().getPlayer().changeAngle(DELTA_ANGLE);
-                    leftHandler.postDelayed(this, 30);
-                }
-            };
-
         });
 
         homeButton = (Button) findViewById(R.id.home_button);
@@ -194,12 +212,11 @@ public class GameActivity extends Activity
         });
 
         restartButton = (Button) findViewById(R.id.restart_button);
-        restartButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
+        restartButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
 
                 MainActivity.getmM().start(gameView.getGameActivity());
+
                 highScoreText.setVisibility(TextView.GONE);
                 pauseButtonDown = false;
                 activityPaused = false;
@@ -210,12 +227,12 @@ public class GameActivity extends Activity
                 restartButton.setVisibility(Button.GONE);
                 rightButton.setEnabled(true);
                 leftButton.setEnabled(true);
+                if (rightHandler != null) rightHandler.removeCallbacks(TiltPlayerRight);
+                if (leftHandler != null) leftHandler.removeCallbacks(TiltPlayerLeft);
                 gameView.restartGame();
 
             }
         });
-
-        pauseButton = (ImageButton) findViewById(R.id.pause_button);
 
         pauseButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -243,30 +260,25 @@ public class GameActivity extends Activity
                     MainActivity.getmM().pause();
                 }
                 activityPaused = !activityPaused;       //invert the activity state
+                Log.d("pause button", Boolean.toString(activityPaused));
+                Log.d("game running", Boolean.toString(gameView.getGameLoop().gameIsRunning));
+            }
+        });
 
+        homeButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(GameActivity.this, MainActivity.class));       //start the main activity
             }
         });
     }
-
-    final Handler gameLoopMessageHandler = new Handler()
-    {
-        public void handleMessage(Message msg)
-        {
-            switch (msg.arg1)
-            {
-                case 1:     //player death
-                    die();
-            }
-        }
-    };
 
     private void die()
     {
         if (gameView.getGameLoop().getPlayerScore() > 0) {   // Verify player has achieved a valid high score
             if (gameView.getGameLoop().getPlayerScore() > prefs.getInt("highScore", -999))  // Set new high score
             {
-                gameView.getGameActivity().getEditor().putInt("highScore", gameView.getGameLoop().getPlayerScore());
-                gameView.getGameActivity().getEditor().commit();
+                this.getEditor().putInt("highScore", gameView.getGameLoop().getPlayerScore());
+                this.getEditor().commit();
                 highScoreText.setText("New high score: " + gameView.getGameLoop().getPlayerScore());
                 highScoreText.setVisibility(TextView.VISIBLE);
             }
@@ -282,5 +294,19 @@ public class GameActivity extends Activity
 
         pauseButtonDown = true;
         MainActivity.getmM().pause();
+    }
+
+    @Override
+    public Object onRetainNonConfigurationInstance(){
+        Log.d("GameActivity", "onRetainNonConfigurationInstance");
+        Bundle ret =  gameView.myOnSaveInstanceState();
+        gameView = null;
+        return ret;
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d("GameActivity", "onDestroy");
+        super.onDestroy();
     }
 }

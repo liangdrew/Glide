@@ -10,8 +10,6 @@ public class Player extends Activity
 {
     private final Paint PLAYER_COLOUR = new Paint();
     private final int length;
-    private int screenWidth;
-    private int screenHeight;
     private int xPos; //center
     private int yPos; //center
     private int startX;
@@ -25,16 +23,16 @@ public class Player extends Activity
     Player (int width, int height)
     {
         length = width/12;
-        screenWidth = width;
-        screenHeight = height;
         xPos = width/2;
         yPos = height/5;
         gravity = width/150;
     }
 
-    public void changeAngle(double deltaAngle)
-    {
-        this.angle += deltaAngle;
+    Player (int width, int height, int x, int y){
+        length = width/12;
+        xPos = x;
+        yPos = y;
+        gravity = width/150;
     }
 
     public void drawPlayer(Canvas canvas)
@@ -51,6 +49,16 @@ public class Player extends Activity
     public double getStopX(){return (double) stopX;}
     public double getStartY(){return (double) startY;}
     public double getStopY(){return (double) stopY;}
+    public int getxPos(){return xPos;}
+    public int getyPos(){return yPos;}
+    public double getVelocity(){return this.velocity;}
+    public double getAngle(){return this.angle;}
+    public void setAngle(double Angle){this.angle = Angle;}
+    public void changeAngle(double deltaAngle)
+    {
+        this.angle += deltaAngle;
+    }
+    public void setVelocity(double v){this.velocity = v;}
 
     public void updatePlayer(int screenWidth, int screenHeight)
     {

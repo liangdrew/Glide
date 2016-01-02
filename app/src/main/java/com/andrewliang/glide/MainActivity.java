@@ -3,6 +3,7 @@ package com.andrewliang.glide;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.content.Intent;
 
 public class MainActivity extends Activity {
 
@@ -11,6 +12,15 @@ public class MainActivity extends Activity {
     private static MusicManager mM = new MusicManager();
 
     public static MusicManager getmM() {return mM;}
+
+    @Override
+    public void onBackPressed() {
+        // exit the app when back button pressed
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
 
     @Override
     protected void onResume()
