@@ -29,9 +29,6 @@ class Food
         setColors();
     }
 
-//        Color pinkish = new Color();
-//        int pinkishRBG = (int)Long.parseLong("f99097", 16);
-
     private void setColors() {
         int pinkishRBG = (int)Long.parseLong("f99097", 16);
         int pinkR = (pinkishRBG >> 16) & 0xFF;
