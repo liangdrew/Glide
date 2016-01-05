@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/how_to_glide"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"/>
+        android:layout_centerVertical="true"
+        android:paddingTop="5dp"/>
 
 </RelativeLayout>
