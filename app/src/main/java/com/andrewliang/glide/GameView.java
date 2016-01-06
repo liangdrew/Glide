@@ -86,7 +86,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public void myOnRestoreInstanceState(Bundle bundle) {
         // load game data from previous state stored in bundle
-        Log.d("gameView", "restored instance state");
 
         // load player data
         gameLoop.setPlayerScore(bundle.getInt("playerScore"));
@@ -148,7 +147,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     // lifecycle methods
 
     public void pause() {
-        Log.d("gameView", "pause");
         gameLoop.setGameIsRunning(false);
 
         try {
@@ -160,14 +158,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void resume() {
-        Log.d("gameView", "resume");
         gameLoop.setGameIsRunning(true);
         gameThread = new Thread(gameLoop);
         gameThread.start();
     }
 
     public void restartGame() {
-        Log.d("gameView", "restart");
         gameLoop = null;
         gameThread = null;
 

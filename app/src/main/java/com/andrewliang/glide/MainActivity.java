@@ -26,7 +26,6 @@ public class MainActivity extends Activity {
     protected void onResume()
     {
         super.onResume();
-        Log.d(TAG, "onResume");
         mM.start(this);
     }
 
@@ -34,7 +33,6 @@ public class MainActivity extends Activity {
     protected void onPause()
     {
         super.onPause();
-        Log.d(TAG, "onPause");
         mM.pause();
     }
 
@@ -42,13 +40,11 @@ public class MainActivity extends Activity {
     protected void onStop()
     {
         super.onStop();
-        Log.d(TAG, "onStop");
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate");
         setContentView(R.layout.activity_main);
         if (mM != null) {
             mM.release();
@@ -59,7 +55,6 @@ public class MainActivity extends Activity {
     @Override
     public void finish() {
         super.finish();
-        Log.d(TAG, "finish");
         mM.release();
     }
 
