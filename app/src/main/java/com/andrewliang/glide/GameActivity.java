@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -29,7 +32,9 @@ public class GameActivity extends Activity {
     private TextView highScoreText;
     private Button restartButton;
     private Button homeButton;
-    private ImageView pausedTitle;
+//    private ImageView pausedTitle;
+    private TextView pausedTitle;
+    Paint pausedTitlePaint = new Paint();
 
     // UI variables
     private GameView gameView;
@@ -63,8 +68,8 @@ public class GameActivity extends Activity {
                 rightButton.setEnabled(false);
                 leftButton.setEnabled(false);
                 pauseButton.setImageResource(R.drawable.play_button_image);
-                homeButton.setVisibility(Button.VISIBLE);
-                restartButton.setVisibility(Button.VISIBLE);
+//                homeButton.setVisibility(Button.VISIBLE);
+//                restartButton.setVisibility(Button.VISIBLE);
             } catch (Exception e) {
                 Log.d("onPause", e.getMessage());
 
@@ -109,7 +114,13 @@ public class GameActivity extends Activity {
         prefs = this.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         editor = prefs.edit();
         highScoreText = (TextView) findViewById(R.id.new_high_score_text);
-        pausedTitle = (ImageView) findViewById(R.id.pausedTitle);
+//        pausedTitle = (ImageView) findViewById(R.id.pausedTitle);
+        pausedTitle = (TextView) findViewById(R.id.pausedTitle);
+        pausedTitlePaint.setColor(Color.BLACK);
+        pausedTitlePaint.setAntiAlias(true);
+        pausedTitlePaint.setTypeface(Typeface.MONOSPACE);
+        pausedTitlePaint.setTextSize(70);
+        pausedTitle.getPaint().set(pausedTitlePaint);
 
         // create buttons and define their actions
         rightButton = (ImageButton) findViewById(R.id.right_button);
@@ -217,7 +228,8 @@ public class GameActivity extends Activity {
                 pauseButtonDown = false;
                 activityPaused = false;
                 pausedTitle.setVisibility(View.GONE);
-                pausedTitle.setImageResource(R.drawable.paused_title);
+//                pausedTitle.setImageResource(R.drawable.paused_title);
+                pausedTitle.setText(R.string.pause_label);
                 pauseButton.setImageResource(R.drawable.pause_button);
                 homeButton.setVisibility(Button.GONE);
                 restartButton.setVisibility(Button.GONE);
@@ -283,7 +295,8 @@ public class GameActivity extends Activity {
         rightButton.setEnabled(false);
         leftButton.setEnabled(false);
 
-        pausedTitle.setImageResource(R.drawable.gameover_title);
+//        pausedTitle.setImageResource(R.drawable.gameover_title);
+        pausedTitle.setText(R.string.game_over_label);
         pausedTitle.setVisibility(View.VISIBLE);
         homeButton.setVisibility(Button.VISIBLE);
         restartButton.setVisibility(Button.VISIBLE);
@@ -294,7 +307,6 @@ public class GameActivity extends Activity {
 
     @Override
     public Object onRetainNonConfigurationInstance(){
-        Log.d("GameActivity", "onRetainNonConfigurationInstance");
         Bundle ret =  gameView.myOnSaveInstanceState();
         gameView = null;
         return ret;
@@ -302,7 +314,6 @@ public class GameActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        Log.d("GameActivity", "onDestroy");
         super.onDestroy();
     }
 }

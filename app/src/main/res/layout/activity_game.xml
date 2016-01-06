@@ -6,11 +6,22 @@
     android:id="@+id/activity_game"
     tools:context=".GameActivity">
 
-    <ImageView
+    <!--<ImageView-->
+        <!--android:id="@+id/pausedTitle"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:src="@drawable/paused_title"-->
+        <!--android:layout_below="@+id/new_high_score_text"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:paddingTop="10dp"-->
+        <!--android:paddingBottom="20dp"-->
+        <!--android:visibility="gone"/>-->
+
+    <TextView
         android:id="@+id/pausedTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/paused_title"
+        android:text="@string/pause_label"
         android:layout_below="@+id/new_high_score_text"
         android:layout_centerHorizontal="true"
         android:paddingTop="10dp"

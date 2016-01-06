@@ -6,8 +6,4 @@
     <solid
         android:color="#f99097"
         />
-    <!--<size-->
-        <!--android:width="250dp"-->
-        <!--android:height="35dp"-->
-        <!--/>-->
 </shape>
