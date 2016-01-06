@@ -9,7 +9,9 @@
         android:allowBackup="true"
         android:icon="@drawable/glide_logo"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        android:versionCode="1"
+        android:versionName="1.0">
         <activity
             android:name="com.andrewliang.glide.MainActivity"
             android:label="@string/app_name"
@@ -24,13 +26,6 @@
             android:name="com.andrewliang.glide.GameActivity"
             android:label="@string/app_name"
             android:screenOrientation="sensorLandscape" >
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
         </activity>
         <activity
             android:name="com.andrewliang.glide.AboutActivity"

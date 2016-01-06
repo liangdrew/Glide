@@ -48,7 +48,6 @@ public class GameActivity extends Activity {
 
     @Override
     protected void onResume() {
-        Log.d("GameActivity", "onResume");
         super.onResume();
 
         MainActivity.getmM().start(this);
@@ -57,7 +56,6 @@ public class GameActivity extends Activity {
     @Override
     protected void onPause() {
 
-        Log.d("GameActivity", "onPause");
         //pause the game loop if the game is not already paused
         if (!activityPaused) {
             try {
@@ -79,13 +77,11 @@ public class GameActivity extends Activity {
 
     @Override
     protected void onStop() {
-        Log.d("GameActivity", "onStop");
         super.onStop();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("GameActivity", "onCreate");
         super.onCreate(savedInstanceState);
 
         // disable activity title and make full screen

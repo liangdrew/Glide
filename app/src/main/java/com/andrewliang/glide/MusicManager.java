@@ -13,7 +13,7 @@ public class MusicManager {
     public void start(Context context) {
 
         if (mp == null) {
-            mp = MediaPlayer.create(context, R.raw.drax_hhchristmas);
+            mp = MediaPlayer.create(context, R.raw.beforedawn);
             mp.setVolume(0.5f, 0.5f);
             mp.setLooping(true);
             mp.start();

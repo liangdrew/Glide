@@ -20,7 +20,6 @@ public class AboutActivity extends Activity {
 
     @Override
     protected void onStop() {
-
         super.onStop();
     }
 
@@ -29,18 +28,16 @@ public class AboutActivity extends Activity {
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_high_scores);
+        setContentView(R.layout.fragment_about);
     }
 
     @Override
     public void finish() {
         super.finish();
-        Log.d("AboutActivity", "finish");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d("AboutActivity", "onDestroy");
     }
 }

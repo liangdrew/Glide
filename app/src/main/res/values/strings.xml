@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GLIDE</string>
+    <string name="app_name">Glide</string>
     <string name="about_label">How to glide?</string>
     <string name="play_game_label">Start gliding!</string>
     <string name="restart_label">Restart</string>
