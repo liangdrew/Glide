@@ -6,17 +6,6 @@
     android:id="@+id/activity_game"
     tools:context=".GameActivity">
 
-    <!--<ImageView-->
-        <!--android:id="@+id/pausedTitle"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:src="@drawable/paused_title"-->
-        <!--android:layout_below="@+id/new_high_score_text"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:paddingTop="10dp"-->
-        <!--android:paddingBottom="20dp"-->
-        <!--android:visibility="gone"/>-->
-
     <TextView
         android:id="@+id/pausedTitle"
         android:layout_width="wrap_content"
@@ -24,8 +13,7 @@
         android:text="@string/pause_label"
         android:layout_below="@+id/new_high_score_text"
         android:layout_centerHorizontal="true"
-        android:paddingTop="10dp"
-        android:paddingBottom="20dp"
+        android:paddingBottom="10dp"
         android:visibility="gone"/>
 
     <TextView
@@ -93,11 +81,11 @@
         android:text="@string/restart_label"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
-        android:layout_width="250dp"
-        android:layout_height="60dp"
+        android:layout_width="300dp"
+        android:layout_height="55dp"
         android:background="@drawable/play_button_style"
         android:layout_margin="@dimen/menu_button_margin"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_below="@id/pausedTitle"
@@ -109,8 +97,8 @@
         android:text="@string/home_label"
         android:textColor="#636363"
         android:textSize="20sp"
-        android:layout_width="250dp"
-        android:layout_height="60dp"
+        android:layout_width="300dp"
+        android:layout_height="55dp"
         android:background="@drawable/about_button_style"
         android:layout_margin="@dimen/menu_button_margin"
         android:layout_below="@id/restart_button"

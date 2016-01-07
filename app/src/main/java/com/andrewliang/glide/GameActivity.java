@@ -27,6 +27,7 @@ public class GameActivity extends Activity {
 
     private boolean activityPaused = false;
     private boolean backPressed = false;
+    private BroadcastReceiver mReceiver;
 
     // Pause "menu" buttons and text declaration
     private TextView highScoreText;
@@ -62,9 +63,8 @@ public class GameActivity extends Activity {
     @Override
     protected void onPause() {
 
-        if (ScreenReceiver.wasScreenOn) {      // When screen is turning OFF
-            MainActivity.getmM().pause();
-        }
+        // When screen is turning OFF
+        if (ScreenReceiver.wasScreenOn) {MainActivity.getmM().pause();}
         //pause the game loop if the game is not already paused
         if (!backPressed) {
             homeButton.setVisibility(Button.VISIBLE);
@@ -88,6 +88,7 @@ public class GameActivity extends Activity {
 
     @Override
     protected void onStop() {
+
         super.onStop();
     }
 
@@ -97,7 +98,7 @@ public class GameActivity extends Activity {
 
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
-        BroadcastReceiver mReceiver = new ScreenReceiver();
+        mReceiver = new ScreenReceiver();
         registerReceiver(mReceiver, filter);
 
         // disable activity title and make full screen

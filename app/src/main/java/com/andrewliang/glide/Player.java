@@ -24,15 +24,15 @@ public class Player extends Activity
     {
         length = width/12;
         xPos = width/2;
-        yPos = height/5;
-        gravity = width/150;
+        yPos = height/4;
+        gravity = width/175;
     }
 
     Player (int width, int height, int x, int y){
         length = width/12;
         xPos = x;
         yPos = y;
-        gravity = width/150;
+        gravity = width/175;
     }
 
     public void drawPlayer(Canvas canvas)

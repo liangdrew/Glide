@@ -38,7 +38,7 @@ public class GameLoop implements Runnable {
         this.gameView = g;
         this.viewWidth = w;  // Since game is landscape
         this.viewHeight = h;
-        this.player = new Player(viewWidth, viewHeight);  // Fix proportions
+        this.player = new Player(viewWidth, viewHeight);
     }
 
     // lots of setters and getters, because we have to recreate the game loop when the screen is locked/unlocked
