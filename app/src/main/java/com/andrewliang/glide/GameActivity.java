@@ -18,7 +18,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import java.lang.ref.WeakReference;
 
@@ -32,7 +31,6 @@ public class GameActivity extends Activity {
     private TextView highScoreText;
     private Button restartButton;
     private Button homeButton;
-//    private ImageView pausedTitle;
     private TextView pausedTitle;
     Paint pausedTitlePaint = new Paint();
 
@@ -68,16 +66,17 @@ public class GameActivity extends Activity {
                 rightButton.setEnabled(false);
                 leftButton.setEnabled(false);
                 pauseButton.setImageResource(R.drawable.play_button_image);
-//                homeButton.setVisibility(Button.VISIBLE);
-//                restartButton.setVisibility(Button.VISIBLE);
+
+                homeButton.setVisibility(Button.VISIBLE);
+                restartButton.setVisibility(Button.VISIBLE);
             } catch (Exception e) {
                 Log.d("onPause", e.getMessage());
 
             }
             activityPaused = true;
-            MainActivity.getmM().pause();
         }
         super.onPause();
+        MainActivity.getmM().pause();
     }
 
     @Override
@@ -114,12 +113,11 @@ public class GameActivity extends Activity {
         prefs = this.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         editor = prefs.edit();
         highScoreText = (TextView) findViewById(R.id.new_high_score_text);
-//        pausedTitle = (ImageView) findViewById(R.id.pausedTitle);
         pausedTitle = (TextView) findViewById(R.id.pausedTitle);
         pausedTitlePaint.setColor(Color.BLACK);
         pausedTitlePaint.setAntiAlias(true);
         pausedTitlePaint.setTypeface(Typeface.MONOSPACE);
-        pausedTitlePaint.setTextSize(70);
+        pausedTitlePaint.setTextSize(gameView.getViewWidth()/10);
         pausedTitle.getPaint().set(pausedTitlePaint);
 
         // create buttons and define their actions
@@ -228,7 +226,6 @@ public class GameActivity extends Activity {
                 pauseButtonDown = false;
                 activityPaused = false;
                 pausedTitle.setVisibility(View.GONE);
-//                pausedTitle.setImageResource(R.drawable.paused_title);
                 pausedTitle.setText(R.string.pause_label);
                 pauseButton.setImageResource(R.drawable.pause_button);
                 homeButton.setVisibility(Button.GONE);
@@ -294,8 +291,6 @@ public class GameActivity extends Activity {
         activityPaused = false;
         rightButton.setEnabled(false);
         leftButton.setEnabled(false);
-
-//        pausedTitle.setImageResource(R.drawable.gameover_title);
         pausedTitle.setText(R.string.game_over_label);
         pausedTitle.setVisibility(View.VISIBLE);
         homeButton.setVisibility(Button.VISIBLE);

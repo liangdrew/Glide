@@ -6,6 +6,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,10 +43,14 @@ public class MainFragment extends Fragment {
             }
         });
 
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        int width = displaymetrics.widthPixels;
+
         Paint titlePaint = new Paint();
         titlePaint.setColor(Color.BLACK);
         titlePaint.setAntiAlias(true);
-        titlePaint.setTextSize(125);
+        titlePaint.setTextSize(width/7);
         titlePaint.setTypeface(Typeface.MONOSPACE);
         TextView title = (TextView) rootView.findViewById(R.id.title_text);
         title.getPaint().set(titlePaint);

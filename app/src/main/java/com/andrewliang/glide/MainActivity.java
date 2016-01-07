@@ -1,16 +1,16 @@
 package com.andrewliang.glide;
 
 import android.app.Activity;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
 import android.content.Intent;
+import android.view.Display;
 
 public class MainActivity extends Activity {
 
     private final String TAG = "MainActivity";
-
     private static MusicManager mM = new MusicManager();
-
     public static MusicManager getmM() {return mM;}
 
     @Override

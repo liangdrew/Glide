@@ -102,6 +102,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public GameLoop getGameLoop() {return this.gameLoop;}
     public GameActivity getGameActivity() {return this.gameActivity;}
+    public int getViewWidth() {return this.viewWidth2;}
 
     // handler for receiving draw data from the game loop thread
     public static class drawingHandler extends Handler{
