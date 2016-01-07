@@ -1,8 +1,10 @@
 package com.andrewliang.glide;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -54,14 +56,17 @@ public class GameActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
-        MainActivity.getmM().start(this);
+        if (ScreenReceiver.wasScreenOn) {       // Only start music if screen was on previously
+            MainActivity.getmM().start(this);   // Prevents music from playing during the lock screen after timeout
+        }
     }
 
     @Override
     protected void onPause() {
 
-        Log.d("BUG", "PAUSED");
-
+        if (ScreenReceiver.wasScreenOn) {      // When screen is turning OFF
+            MainActivity.getmM().pause();
+        }
         //pause the game loop if the game is not already paused
         if (!backPressed) {
             homeButton.setVisibility(Button.VISIBLE);
@@ -80,8 +85,8 @@ public class GameActivity extends Activity {
             }
             activityPaused = true;
         }
-        super.onPause();
         MainActivity.getmM().pause();
+        super.onPause();
     }
 
     @Override
@@ -92,6 +97,11 @@ public class GameActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        BroadcastReceiver mReceiver = new ScreenReceiver();
+        registerReceiver(mReceiver, filter);
 
         // disable activity title and make full screen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -314,9 +324,8 @@ public class GameActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        Log.d("BUG", "onBP");
-        backPressed = true;
         super.onBackPressed();
+        backPressed = true;
     }
 
     @Override
