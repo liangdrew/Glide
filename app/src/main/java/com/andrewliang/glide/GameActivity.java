@@ -26,6 +26,7 @@ public class GameActivity extends Activity {
 
     private boolean activityPaused = false;
     private boolean pauseButtonDown = false;
+    private boolean backPressed = false;
 
     // Pause "menu" buttons and text declaration
     private TextView highScoreText;
@@ -59,16 +60,20 @@ public class GameActivity extends Activity {
     @Override
     protected void onPause() {
 
+        Log.d("BUG", "PAUSED");
+
         //pause the game loop if the game is not already paused
+        if (!backPressed) {
+            homeButton.setVisibility(Button.VISIBLE);
+            restartButton.setVisibility(Button.VISIBLE);
+            backPressed = false;
+        }
         if (!activityPaused) {
             try {
                 gameView.pause();
                 rightButton.setEnabled(false);
                 leftButton.setEnabled(false);
                 pauseButton.setImageResource(R.drawable.play_button_image);
-
-                homeButton.setVisibility(Button.VISIBLE);
-                restartButton.setVisibility(Button.VISIBLE);
             } catch (Exception e) {
                 Log.d("onPause", e.getMessage());
 
@@ -305,6 +310,13 @@ public class GameActivity extends Activity {
         Bundle ret =  gameView.myOnSaveInstanceState();
         gameView = null;
         return ret;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d("BUG", "onBP");
+        backPressed = true;
+        super.onBackPressed();
     }
 
     @Override
