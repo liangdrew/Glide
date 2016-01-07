@@ -9,23 +9,4 @@
     <string name="pause_label">P A U S E D</string>
     <string name="game_over_label">G A M E   O V E R</string>
     <string name="new_high_score_label">New high score: </string>
-    <string name="about_text">
-        Tilt right using the right arrow, tilt left using the left arrow
-        \n\
-        \n\
-        Catch red orbs and avoid the grey matter!
-        \n\
-        \n\
-        Developers:
-        \n\
-        Andrew Liang, Tejasvi Jodhka, Joseph Hung, David Ma
-    </string>
-    <string name="left">Left</string>
-    <string name="right">Right</string>
-    <string name="retry">Retry</string>
-    <string name="menu">Menu</string>
-    <string name="title_activity_high_scores">HighScoresActivity</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-
 </resources>

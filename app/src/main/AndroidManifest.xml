@@ -29,7 +29,7 @@
         </activity>
         <activity
             android:name="com.andrewliang.glide.AboutActivity"
-            android:label="@string/title_activity_high_scores"
+            android:label="@string/app_name"
             android:screenOrientation="sensorLandscape" >
         </activity>
     </application>
