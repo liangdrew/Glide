@@ -18,7 +18,7 @@ public class GameLoop implements Runnable {
     //gameplay variables
     private final static double PROBABILITY_OF_GREEN_FOOD_SPAWN = 0.005;  // In decimal
     private final static double PROBABILITY_OF_RED_FOOD_SPAWN = 0.01;
-    private final static double PROBABILITY_OF_LIFE_FOOD_SPAWN = 0.001;
+    private final static double PROBABILITY_OF_LIFE_FOOD_SPAWN = 0.0005;
     private final int viewWidth;
     private final int viewHeight;
     private final ArrayList<Food> foods = new ArrayList<Food>();
