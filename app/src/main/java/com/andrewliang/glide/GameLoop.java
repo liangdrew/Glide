@@ -1,7 +1,6 @@
 package com.andrewliang.glide;
 
 import android.os.Message;
-import android.util.Log;
 import java.lang.Exception;
 import java.lang.InterruptedException;
 import java.lang.Math;
@@ -19,6 +18,7 @@ public class GameLoop implements Runnable {
     //gameplay variables
     private final static double PROBABILITY_OF_GREEN_FOOD_SPAWN = 0.005;  // In decimal
     private final static double PROBABILITY_OF_RED_FOOD_SPAWN = 0.01;
+    private final static double PROBABILITY_OF_LIFE_FOOD_SPAWN = 0.001;
     private final int viewWidth;
     private final int viewHeight;
     private final ArrayList<Food> foods = new ArrayList<Food>();
@@ -167,12 +167,17 @@ public class GameLoop implements Runnable {
         if (r <= PROBABILITY_OF_GREEN_FOOD_SPAWN) {
             int speed = rand.nextInt(viewWidth/200) + 1;    //random speed between 1 and 5 pixels per update
             int xPosition = rand.nextInt((int)(viewWidth*59/60 - viewWidth/60 + 1)) + viewWidth/60;     //random x position between 1/60th width and 59/60 width of view
-            foods.add(new Food(speed, xPosition, 0, viewWidth / 60, 0));     //add a new green food to foods
+            foods.add(new Food(speed, xPosition, 0, viewWidth / 60, Food.GREEN_FOOD));     //add a new green food to foods
         }
         else if (r > PROBABILITY_OF_GREEN_FOOD_SPAWN && r <= (PROBABILITY_OF_GREEN_FOOD_SPAWN + PROBABILITY_OF_RED_FOOD_SPAWN)) {
             int speed = rand.nextInt(viewWidth/200) + 1;    //random speed between 1 and 5 pixels per update
             int xPosition = rand.nextInt((int)(viewWidth*59/60 - viewWidth/60 + 1)) + viewWidth/60;     //random x position between 1/60th width and 59/60 width of view
-            foods.add(new Food(speed, xPosition, 0, viewWidth / 60, 1));       //ad a new red food to foods
+            foods.add(new Food(speed, xPosition, 0, viewWidth / 60, Food.RED_FOOD));       //ad a new red food to foods
+        }
+        else if (r > (PROBABILITY_OF_GREEN_FOOD_SPAWN + PROBABILITY_OF_RED_FOOD_SPAWN) && r <= PROBABILITY_OF_GREEN_FOOD_SPAWN + PROBABILITY_OF_RED_FOOD_SPAWN + PROBABILITY_OF_LIFE_FOOD_SPAWN){
+            int speed = rand.nextInt(viewWidth/200) + 1;    //random speed between 1 and 5 pixels per update
+            int xPosition = rand.nextInt((int)(viewWidth*59/60 - viewWidth/60 + 1)) + viewWidth/60;     //random x position between 1/60th width and 59/60 width of view
+            foods.add(new Food(speed, xPosition, 0, viewWidth/60, Food.LIFE_FOOD));
         }
     }
 
@@ -229,6 +234,9 @@ public class GameLoop implements Runnable {
             if (playerScore != 0)playerScore -= Math.abs(f.getSpeed() - 5);
             if (playerScore < 0) playerScore = 0;  // Prevents negative score
             playerLives -= 1;
+        }
+        else if (f.getFoodType() == Food.LIFE_FOOD){
+            playerLives += 1;
         }
     }
 

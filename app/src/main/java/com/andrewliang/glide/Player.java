@@ -67,7 +67,6 @@ public class Player extends Activity
         velocity += acceleration;
         xPos += (int) (velocity * Math.cos(angle));
         yPos -= (int) (velocity * Math.sin(angle));
-        //Log.d("updatePlayer", "stopX = " + stopX);
 
         //keep the angle between 0 and 2pi
         if (angle >= Math.PI * 2) {angle -= Math.PI * 2;}

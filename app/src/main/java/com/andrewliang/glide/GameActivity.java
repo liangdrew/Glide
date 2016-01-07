@@ -12,7 +12,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -27,7 +26,6 @@ public class GameActivity extends Activity {
     private static final double DELTA_ANGLE = Math.PI/40;
 
     private boolean activityPaused = false;
-    private boolean pauseButtonDown = false;
     private boolean backPressed = false;
 
     // Pause "menu" buttons and text declaration
@@ -80,8 +78,7 @@ public class GameActivity extends Activity {
                 leftButton.setEnabled(false);
                 pauseButton.setImageResource(R.drawable.play_button_image);
             } catch (Exception e) {
-                Log.d("onPause", e.getMessage());
-
+                e.printStackTrace();
             }
             activityPaused = true;
         }
@@ -238,7 +235,6 @@ public class GameActivity extends Activity {
                 MainActivity.getmM().start(gameView.getGameActivity());
 
                 highScoreText.setVisibility(TextView.GONE);
-                pauseButtonDown = false;
                 activityPaused = false;
                 pausedTitle.setVisibility(View.GONE);
                 pausedTitle.setText(R.string.pause_label);
@@ -262,7 +258,6 @@ public class GameActivity extends Activity {
                     leftButton.setEnabled(true);
                     pauseButton.setImageResource(R.drawable.pause_button);
                     gameView.resume();
-                    pauseButtonDown = false;
                     pausedTitle.setVisibility(View.GONE);
                     restartButton.setVisibility(Button.GONE);
                     homeButton.setVisibility(Button.GONE);
@@ -273,15 +268,12 @@ public class GameActivity extends Activity {
                     leftButton.setEnabled(false);
                     pauseButton.setImageResource(R.drawable.play_button_image);
                     gameView.pause();
-                    pauseButtonDown = true;
                     pausedTitle.setVisibility(View.VISIBLE);
                     restartButton.setVisibility(Button.VISIBLE);
                     homeButton.setVisibility(Button.VISIBLE);
                     MainActivity.getmM().pause();
                 }
                 activityPaused = !activityPaused;       //invert the activity state
-                Log.d("pause button", Boolean.toString(activityPaused));
-                Log.d("game running", Boolean.toString(gameView.getGameLoop().gameIsRunning));
             }
         });
 
@@ -311,7 +303,6 @@ public class GameActivity extends Activity {
         homeButton.setVisibility(Button.VISIBLE);
         restartButton.setVisibility(Button.VISIBLE);
 
-        pauseButtonDown = true;
         MainActivity.getmM().pause();
     }
 

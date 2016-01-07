@@ -2,11 +2,8 @@ package com.andrewliang.glide;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.util.Log;
 
 public class MusicManager {
-
-    private static final String TAG = "MusicManager";
 
     private MediaPlayer mp;
 
@@ -32,7 +29,6 @@ public class MusicManager {
     }
 
     public void release() {
-        Log.d(TAG, "Releasing media player");
 
         try {
             if (mp != null) {
@@ -43,7 +39,7 @@ public class MusicManager {
                 mp = null;
             }
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage(), e);
+            e.printStackTrace();
         }
     }
 }

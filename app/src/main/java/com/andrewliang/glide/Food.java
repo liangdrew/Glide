@@ -4,12 +4,35 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-import java.util.ListIterator;
-
 class Food
 {
-    private int GREEN_FOOD = 0;                             //for use when creating a new food
-    private final int RED_FOOD = 1;                               //for use when creating a new food
+    public static final int GREEN_FOOD = 0;
+    public static final int RED_FOOD = 1;
+    public static final int LIFE_FOOD = 2;
+
+    // set colors
+    // pink
+    private static final int pinkishRBG = (int)Long.parseLong("f99097", 16);
+    private static final int pinkR = (pinkishRBG >> 16) & 0xFF;
+    private static final int pinkG = (pinkishRBG >> 8) & 0xFF;
+    private static final int pinkB = (pinkishRBG) & 0xFF;
+
+    // grey
+    private static final int greyishRBG = (int)Long.parseLong("636363", 16);
+    private static final int greyR = (greyishRBG >> 16) & 0xFF;
+    private static final int greyG = (greyishRBG >> 8) & 0xFF;
+    private static final int greyB = (greyishRBG) & 0xFF;
+
+    // yellow
+    private static final int yellowishRBG = (int)Long.parseLong("d8be2b", 16);
+    private static final int yellowR = (yellowishRBG >> 16) & 0xFF;
+    private static final int yellowG = (yellowishRBG >> 8) & 0xFF;
+    private static final int yellowB = (yellowishRBG) & 0xFF;
+
+    // color array for determining color of a new food
+    private static final int[] FOOD_COLORS = {Color.rgb(pinkR, pinkG, pinkB),
+            Color.rgb(greyR, greyG, greyB),
+            Color.rgb(yellowR, yellowG, yellowB)};
 
     private final int speed;      //the speed at which this food falls down the screen
     private final int xPos;       //x position of the center of the food
@@ -26,21 +49,7 @@ class Food
         this.speed = speed;
         this.foodRadius = radius;
         this.foodType = type;
-        setColors();
-    }
 
-    private void setColors() {
-        int pinkishRBG = (int)Long.parseLong("f99097", 16);
-        int pinkR = (pinkishRBG >> 16) & 0xFF;
-        int pinkG = (pinkishRBG >> 8) & 0xFF;
-        int pinkB = (pinkishRBG) & 0xFF;
-
-        int greyishRBG = (int)Long.parseLong("636363", 16);
-        int greyR = (greyishRBG >> 16) & 0xFF;
-        int greyG = (greyishRBG >> 8) & 0xFF;
-        int greyB = (greyishRBG) & 0xFF;
-
-        int[] FOOD_COLORS = {Color.rgb(pinkR, pinkG, pinkB), Color.rgb(greyR, greyG, greyB)};
         this.foodColor = FOOD_COLORS[foodType];
         foodPaint.setColor(foodColor);
         foodPaint.setAntiAlias(true);

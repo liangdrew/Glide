@@ -8,7 +8,6 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -63,7 +62,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public Bundle myOnSaveInstanceState() {
         // save game data in a bundle
-        Log.d("gameView", "saved instance state");
         Bundle bundle = new Bundle();
 
         // save player data
@@ -153,7 +151,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         try {
             gameThread.join();
         }
-        catch (InterruptedException e){Log.d("gameView pause", e.getMessage());}
+        catch (InterruptedException e) {e.printStackTrace();}
 
         gameThread = null;
     }
