@@ -1,7 +1,6 @@
 package com.andrewliang.glide;
 
 import android.os.Message;
-import android.util.Log;
 import java.lang.Exception;
 import java.lang.InterruptedException;
 import java.lang.Math;
