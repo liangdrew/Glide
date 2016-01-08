@@ -70,13 +70,14 @@ public class GameActivity extends Activity {
             homeButton.setVisibility(Button.VISIBLE);
             restartButton.setVisibility(Button.VISIBLE);
             backPressed = false;
+            pauseButton.setImageResource(R.drawable.play_button_image);
+            pausedTitle.setVisibility(View.VISIBLE);
         }
         if (!activityPaused) {
             try {
                 gameView.pause();
                 rightButton.setEnabled(false);
                 leftButton.setEnabled(false);
-                pauseButton.setImageResource(R.drawable.play_button_image);
             } catch (Exception e) {
                 e.printStackTrace();
             }
