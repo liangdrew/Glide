@@ -53,18 +53,19 @@ public class GameActivity extends Activity {
 
     @Override
     protected void onResume() {
-        super.onResume();
 
         if (ScreenReceiver.wasScreenOn) {       // Only start music if screen was on previously
             MainActivity.getmM().start(this);   // Prevents music from playing during the lock screen after timeout
         }
+        super.onResume();
     }
 
     @Override
     protected void onPause() {
 
+        MainActivity.getmM().pause();
+
         // When screen is turning OFF
-        if (ScreenReceiver.wasScreenOn) {MainActivity.getmM().pause();}
         //pause the game loop if the game is not already paused
         if (!backPressed) {
             homeButton.setVisibility(Button.VISIBLE);
@@ -83,24 +84,12 @@ public class GameActivity extends Activity {
             }
             activityPaused = true;
         }
-        MainActivity.getmM().pause();
         super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-
-        super.onStop();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
-        filter.addAction(Intent.ACTION_SCREEN_OFF);
-        mReceiver = new ScreenReceiver();
-        registerReceiver(mReceiver, filter);
 
         // disable activity title and make full screen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -319,10 +308,5 @@ public class GameActivity extends Activity {
     public void onBackPressed() {
         super.onBackPressed();
         backPressed = true;
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 }

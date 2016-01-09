@@ -53,10 +53,5 @@ public class MainFragment extends Fragment {
 
         return rootView;
     }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
 }
 

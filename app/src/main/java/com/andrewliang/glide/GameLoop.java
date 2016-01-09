@@ -93,6 +93,7 @@ public class GameLoop implements Runnable {
 
                     // update state of the game - food position, player position, and score, then draw
                     updateState();
+                    render();
 
                     // get the update time in ms
                     timeDiff = System.currentTimeMillis() - beginTime;
@@ -112,9 +113,6 @@ public class GameLoop implements Runnable {
                     // if the update time took longer than a frame period, then skip frames, i.e. update without rendering
                     while (sleepTime < 0 && framesSkipped < MAX_FRAME_SKIPS) {
                         updateState();
-                        generateFood();
-                        checkCollision();
-                        player.updatePlayer(viewWidth, viewHeight);
                         sleepTime += FRAME_PERIOD;//sleepTime becomes the time difference between the next frame and the last render
                         framesSkipped++;
                     }
@@ -145,6 +143,10 @@ public class GameLoop implements Runnable {
             foods.remove(f);
         }
 
+        checkDeath();
+    }
+
+    private void render() {
         //package the updated foods and player into a box to send as a message to the handler in gameview
         Box<ArrayList<Food>, Player, String, String, String> messageBox = new Box<ArrayList<Food>, Player, String, String, String>();
         messageBox.setFoods(foods);
@@ -157,8 +159,6 @@ public class GameLoop implements Runnable {
         Message gameState = Message.obtain();
         gameState.obj = messageBox;
         gameView.getMyDrawingHandler().sendMessage(gameState);
-
-        checkDeath();
     }
 
     private void generateFood() {
