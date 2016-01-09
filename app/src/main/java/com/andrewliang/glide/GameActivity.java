@@ -211,14 +211,6 @@ public class GameActivity extends Activity {
             }
         });
 
-        homeButton = (Button) findViewById(R.id.home_button);
-        homeButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                MainActivity.getmM().start(gameView.getGameActivity());
-                setContentView(R.layout.activity_main);
-            }
-        });
-
         restartButton = (Button) findViewById(R.id.restart_button);
         restartButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -268,8 +260,11 @@ public class GameActivity extends Activity {
             }
         });
 
+        homeButton = (Button) findViewById(R.id.home_button);
         homeButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                setHighScore();
+                MainActivity.getmM().start(gameView.getGameActivity());
                 startActivity(new Intent(GameActivity.this, MainActivity.class));       //start the main activity
             }
         });
@@ -277,14 +272,9 @@ public class GameActivity extends Activity {
 
     private void die()
     {
-        if (gameView.getGameLoop().getPlayerScore() > 0) {   // Verify player has achieved a valid high score
-            if (gameView.getGameLoop().getPlayerScore() > prefs.getInt("highScore", -999))  // Set new high score
-            {
-                this.getEditor().putInt("highScore", gameView.getGameLoop().getPlayerScore());
-                this.getEditor().commit();
-                highScoreText.setText("New high score: " + gameView.getGameLoop().getPlayerScore());
-                highScoreText.setVisibility(TextView.VISIBLE);
-            }
+        if (setHighScore()) {
+            highScoreText.setText("New high score: " + gameView.getGameLoop().getPlayerScore());
+            highScoreText.setVisibility(TextView.VISIBLE);
         }
         activityPaused = false;
         rightButton.setEnabled(false);
@@ -295,6 +285,19 @@ public class GameActivity extends Activity {
         restartButton.setVisibility(Button.VISIBLE);
 
         MainActivity.getmM().pause();
+    }
+
+    private boolean setHighScore() {
+        boolean newHighScore = false;
+        if (gameView.getGameLoop().getPlayerScore() > 0) {   // Verify player has achieved a valid high score
+            if (gameView.getGameLoop().getPlayerScore() > prefs.getInt("highScore", -999))  // Set new high score
+            {
+                this.getEditor().putInt("highScore", gameView.getGameLoop().getPlayerScore());
+                this.getEditor().commit();
+                newHighScore = true;
+            }
+        }
+        return newHighScore;
     }
 
     @Override
