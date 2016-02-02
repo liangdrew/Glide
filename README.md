@@ -1,6 +1,6 @@
 # Installation
 
-Install Glide for free [here](https://play.google.com/store/apps/details?id=com.andrewliang.glide).
+Install Glide for free for Android devices on the Google Play Store [here](https://play.google.com/store/apps/details?id=com.andrewliang.glide).
 
 # About Glide
 
