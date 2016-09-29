@@ -28,10 +28,10 @@ Get ready to take flight as you try to survive while soaring the skies! Avoid th
 
 # Screenshots
 
-<img src="https://github.com/liangdrew/Glide/blob/master/Promo%20Images/glide_promo1.png" width="400">
-<img src="https://github.com/liangdrew/Glide/blob/master/Promo%20Images/glide_promo2.png" width="400">
-<img src="https://github.com/liangdrew/Glide/blob/master/Promo%20Images/glide_promo3.png" width="400">
-<img src="https://github.com/liangdrew/Glide/blob/master/Promo%20Images/glide_promo4.png" width="400">
+<img src="https://github.com/liangdrew/Glide/blob/master/promo_images/glide_promo1.png" width="400">
+<img src="https://github.com/liangdrew/Glide/blob/master/promo_images/glide_promo2.png" width="400">
+<img src="https://github.com/liangdrew/Glide/blob/master/promo_images/glide_promo3.png" width="400">
+<img src="https://github.com/liangdrew/Glide/blob/master/promo_images/glide_promo4.png" width="400">
 
 
 
