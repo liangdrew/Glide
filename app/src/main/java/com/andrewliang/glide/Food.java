@@ -38,8 +38,8 @@ class Food
     private final int xPos;       //x position of the center of the food
     private int yPos;       //y position of the center of the food
     private final int foodRadius;
-    private final int foodType;   //type of food - atm, either GREEN_FOOD ( = 0) OR RED_FOOD (= 1)
-    private int foodColor;  //red or green, depending on foodType
+    private final int foodType;   //type of food - atm, either GREEN_FOOD (0), RED_FOOD (1), or LIFE_FOOD (2)
+    private int foodColor;  //one of the colors in FOOD_COLORS array based on foodType
     private Paint foodPaint = new Paint();
 
     Food(int speed, int xPos, int yPos, int radius, int type)
