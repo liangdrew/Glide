@@ -45,21 +45,17 @@ public class Player extends Activity
         stopY = (int) (yPos - Math.sin(angle) * length/2);
         canvas.drawLine(startX, startY, stopX, stopY, PLAYER_COLOUR);
     }
-    public double getStartX(){return (double) startX;}
-    public double getStopX(){return (double) stopX;}
-    public double getStartY(){return (double) startY;}
-    public double getStopY(){return (double) stopY;}
-    public int getxPos(){return xPos;}
-    public int getyPos(){return yPos;}
-    public double getVelocity(){return this.velocity;}
-    public double getAngle(){return this.angle;}
-    public void setAngle(double Angle){this.angle = Angle;}
-    public void changeAngle(double deltaAngle)
-    {
-        this.angle += deltaAngle;
-    }
-    public void setVelocity(double v){this.velocity = v;}
-
+    public double getStartX() { return (double) startX; }
+    public double getStopX() { return (double) stopX; }
+    public double getStartY() { return (double) startY; }
+    public double getStopY() { return (double) stopY; }
+    public int getxPos() { return xPos; }
+    public int getyPos() { return yPos; }
+    public double getVelocity() { return this.velocity; }
+    public double getAngle() { return this.angle; }
+    public void setAngle(double Angle) { this.angle = Angle; }
+    public void changeAngle(double deltaAngle) { this.angle += deltaAngle; }
+    public void setVelocity(double v) { this.velocity = v; }
     public void updatePlayer(int screenWidth, int screenHeight)
     {
         PLAYER_COLOUR.setStrokeWidth(screenHeight/80);
@@ -69,14 +65,14 @@ public class Player extends Activity
         yPos -= (int) (velocity * Math.sin(angle));
 
         //keep the angle between 0 and 2pi
-        if (angle >= Math.PI * 2) {angle -= Math.PI * 2;}
-        else if (angle <= 0) {angle += Math.PI * 2;}
+        if (angle >= Math.PI * 2) { angle -= Math.PI * 2; }
+        else if (angle <= 0) { angle += Math.PI * 2; }
 
         //move it to the other side of the screen if half of it crosses the screen boundary
-        if (xPos > screenWidth) {xPos = 0;}
-        else if (xPos < 0) {xPos = screenWidth;}
+        if (xPos > screenWidth) { xPos = 0; }
+        else if (xPos < 0) { xPos = screenWidth; }
 
-        if (yPos > screenHeight) {yPos = 0;}
-        else if (yPos < 0) {yPos = screenHeight;}
+        if (yPos > screenHeight) { yPos = 0; }
+        else if (yPos < 0) { yPos = screenHeight; }
     }
 }
