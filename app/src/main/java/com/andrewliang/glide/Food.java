@@ -6,8 +6,8 @@ import android.graphics.Paint;
 
 class Food
 {
-    public static final int GREEN_FOOD = 0;
-    public static final int RED_FOOD = 1;
+    public static final int GOOD_FOOD = 0;
+    public static final int BAD_FOOD = 1;
     public static final int LIFE_FOOD = 2;
 
     // set colors
@@ -30,16 +30,18 @@ class Food
     private static final int yellowB = (yellowishRBG) & 0xFF;
 
     // color array for determining color of a new food
-    private static final int[] FOOD_COLORS = {Color.rgb(pinkR, pinkG, pinkB),
-            Color.rgb(greyR, greyG, greyB),
-            Color.rgb(yellowR, yellowG, yellowB)};
+    private static final int[] FOOD_COLORS = {
+        Color.rgb(pinkR, pinkG, pinkB),
+        Color.rgb(greyR, greyG, greyB),
+        Color.rgb(yellowR, yellowG, yellowB)
+    };
 
     private final int speed;      //the speed at which this food falls down the screen
     private final int xPos;       //x position of the center of the food
-    private int yPos;       //y position of the center of the food
+    private int yPos;             //y position of the center of the food
     private final int foodRadius;
-    private final int foodType;   //type of food - atm, either GREEN_FOOD (0), RED_FOOD (1), or LIFE_FOOD (2)
-    private int foodColor;  //one of the colors in FOOD_COLORS array based on foodType
+    private final int foodType;   //type of food - atm, either GOOD_FOOD (0), BAD_FOOD (1), or LIFE_FOOD (2)
+    private int foodColor;        //one of the colors in FOOD_COLORS array based on foodType
     private Paint foodPaint = new Paint();
 
     Food(int speed, int xPos, int yPos, int radius, int type)
