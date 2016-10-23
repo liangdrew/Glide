@@ -52,7 +52,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         TEXT_PAINT.setTextSize(viewWidth2 / 25);
         BACKGROUND_PAINT.setColor(Color.WHITE);
 
-        // create game loop and game thread, and start thread if we're not recreating the
+        // create game loop and game thread, and start thread
         gameLoop = new GameLoop(this, viewWidth2, viewHeight2);
         gameLoop.setGameIsRunning(true);
         gameThread = new Thread(gameLoop);
@@ -123,7 +123,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
     private final drawingHandler myDrawingHandler = new drawingHandler(this);
-    public drawingHandler getMyDrawingHandler(){return myDrawingHandler;}
+    public drawingHandler getMyDrawingHandler() { return myDrawingHandler; }
 
     private void drawGame() {
         //drawing sequence
