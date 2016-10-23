@@ -44,7 +44,7 @@ public class GameActivity extends Activity {
     private Handler leftHandler;
     private Handler rightHandler;
 
-    // High Scores data storage variables
+    // Interface for accessing and modifying high scores data
     private static final String PREFS_NAME = "MyPrefsFile";
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
@@ -112,10 +112,11 @@ public class GameActivity extends Activity {
         gameLayout.addView(buttonLayout);
         setContentView(gameLayout);
 
-        // HighScores
+        // High scores
         prefs = this.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         editor = prefs.edit();
         highScoreText = (TextView) findViewById(R.id.new_high_score_text);
+
         pausedTitle = (TextView) findViewById(R.id.pausedTitle);
         pausedTitlePaint.setColor(Color.BLACK);
         pausedTitlePaint.setAntiAlias(true);
@@ -143,12 +144,12 @@ public class GameActivity extends Activity {
         @Override
         public void handleMessage(Message msg) {
             GameActivity g = gameActivityWeakReference.get();
-            if (g != null) g.die();
+            if (g != null) { g.die(); }
         }
     }
 
     private final gameLoopMessageHandler myGameLoopHandler = new gameLoopMessageHandler(this);
-    public gameLoopMessageHandler getMyGameLoopHandler(){return myGameLoopHandler;}
+    public gameLoopMessageHandler getMyGameLoopHandler() { return myGameLoopHandler; }
 
     //create the runnables for changing the angle of the player
     final Runnable TiltPlayerRight = new Runnable() {
@@ -168,7 +169,7 @@ public class GameActivity extends Activity {
         }
     };
 
-    private void setButtonActions(){
+    private void setButtonActions() {
 
         //set the onClick listener to change the angle by some -dTheta during press, every 30 ms
         rightButton.setOnTouchListener(new View.OnTouchListener() {
@@ -178,11 +179,11 @@ public class GameActivity extends Activity {
                     case MotionEvent.ACTION_DOWN:
                         if (rightHandler != null) return true;
                         rightHandler = new Handler();
-                        rightHandler.postDelayed(TiltPlayerRight, 30);
+                        rightHandler.postDelayed(TiltPlayerRight, 30);  // Add Runnable to the message queue
                         break;
                     case MotionEvent.ACTION_UP:
                         if (rightHandler == null) return true;
-                        rightHandler.removeCallbacks(TiltPlayerRight);
+                        rightHandler.removeCallbacks(TiltPlayerRight);  // Remove pending posts of Runnable in queue
                         rightHandler = null;
                         break;
                 }
@@ -226,8 +227,8 @@ public class GameActivity extends Activity {
                 restartButton.setVisibility(Button.GONE);
                 rightButton.setEnabled(true);
                 leftButton.setEnabled(true);
-                if (rightHandler != null) rightHandler.removeCallbacks(TiltPlayerRight);
-                if (leftHandler != null) leftHandler.removeCallbacks(TiltPlayerLeft);
+                if (rightHandler != null) { rightHandler.removeCallbacks(TiltPlayerRight); }
+                if (leftHandler != null) { leftHandler.removeCallbacks(TiltPlayerLeft); }
                 gameView.restartGame();
 
             }
@@ -263,17 +264,20 @@ public class GameActivity extends Activity {
         homeButton = (Button) findViewById(R.id.home_button);
         homeButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                setHighScore();
+                int pScore = gameView.getGameLoop().getPlayerScore();
+                if(needToSetHighScore(pScore)) { saveHighScore(pScore); }
                 MainActivity.getmM().start(gameView.getGameActivity());
                 startActivity(new Intent(GameActivity.this, MainActivity.class));       //start the main activity
             }
         });
     }
 
-    private void die()
-    {
-        if (setHighScore()) {
-            highScoreText.setText("New high score: " + gameView.getGameLoop().getPlayerScore());
+    private void die() {
+
+        int pScore = gameView.getGameLoop().getPlayerScore();
+        if (needToSetHighScore(pScore)) {
+            saveHighScore(pScore);
+            highScoreText.setText("New high score: " + pScore);
             highScoreText.setVisibility(TextView.VISIBLE);
         }
         activityPaused = false;
@@ -287,21 +291,19 @@ public class GameActivity extends Activity {
         MainActivity.getmM().pause();
     }
 
-    private boolean setHighScore() {
-        boolean newHighScore = false;
-        if (gameView.getGameLoop().getPlayerScore() > 0) {   // Verify player has achieved a valid high score
-            if (gameView.getGameLoop().getPlayerScore() > prefs.getInt("highScore", -999))  // Set new high score
-            {
-                this.getEditor().putInt("highScore", gameView.getGameLoop().getPlayerScore());
-                this.getEditor().commit();
-                newHighScore = true;
-            }
-        }
-        return newHighScore;
+    private boolean needToSetHighScore(int pScore) {
+        // Verify if the player has achieved a valid high score
+        if (pScore > 0 && pScore > prefs.getInt("highScore", -999)) { return true; }
+        else { return false; }
+    }
+
+    private void saveHighScore(int pScore) {
+        this.getEditor().putInt("highScore", pScore);
+        this.getEditor().commit();
     }
 
     @Override
-    public Object onRetainNonConfigurationInstance(){
+    public Object onRetainNonConfigurationInstance() {
         Bundle ret =  gameView.myOnSaveInstanceState();
         gameView = null;
         return ret;
