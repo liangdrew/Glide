@@ -13,12 +13,15 @@ public class AboutActivity extends Activity {
             MainActivity.getmM().start(this);   // Prevents music from playing during the lock screen after timeout
         }
         super.onResume();
+
     }
 
     @Override
     protected void onPause() {
+
         MainActivity.getmM().pause();
         super.onPause();
+
     }
 
     @Override
@@ -26,5 +29,6 @@ public class AboutActivity extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_about);
+        
     }
 }
