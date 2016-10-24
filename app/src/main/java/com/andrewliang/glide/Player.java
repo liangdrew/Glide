@@ -56,8 +56,9 @@ public class Player extends Activity
     public void setAngle(double Angle) { this.angle = Angle; }
     public void changeAngle(double deltaAngle) { this.angle += deltaAngle; }
     public void setVelocity(double v) { this.velocity = v; }
-    public void updatePlayer(int screenWidth, int screenHeight)
-    {
+
+    public void updatePlayer(int screenWidth, int screenHeight) {
+
         PLAYER_COLOUR.setStrokeWidth(screenHeight/80);
         double acceleration = gravity * (-Math.sin(angle) * 0.1) - 0.01 * velocity;
         velocity += acceleration;
